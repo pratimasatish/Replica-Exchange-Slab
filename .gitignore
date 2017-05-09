@@ -1,5 +1,6 @@
 lig.*
-theta.*
+theta*
+*.txt
 dump.*
 screen.*
 *.xyz
