@@ -25,7 +25,7 @@ for f in filename:
 first_time = True
 for row in log:
     time = row[0]
-    if (time%1000 != 0):
+    if (time%10000 != 0):
         continue
     print(time)
     for i,f in enumerate(openfiles):
