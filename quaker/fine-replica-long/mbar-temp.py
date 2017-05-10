@@ -8,11 +8,12 @@ import argparse
 
 parser = argparse.ArgumentParser(description="")
 parser.add_argument("-temp", type=float, help="target temp at which to get free energy curve")
+parser.add_argument("-show_err", action='store_true', help="to show free energy curve with error bars or not")
 args = parser.parse_args()
 
 free_energies_filename = 'f_k.out'
 
-T = 2001		# number of snapshots
+T = 1001		# number of snapshots
 nbins_per_angle = 250	# number of bins per angle dimension
 target_temperature = args.temp
 
@@ -39,7 +40,7 @@ beta_k = 1/ (kB * temperature_k)
 U_kn = np.zeros((K, T))		# U_kn[k,t] is the potential energy (in kcal/mol) for snapshot t of temperature index k
 for k in range(K):
     lines = read_file("pot-new.{:3.1f}.txt".format(temperature_k[k]))
-    U_kn[k, :] = lines[:]
+    U_kn[k, :] = lines[1000:]
 
 U_kn = np.array(U_kn)
 # U_kn = np.transpose(U_kn)
@@ -52,7 +53,7 @@ for k in range(K):
     theta_k = np.genfromtxt("theta{:3.1f}.txt".format(temperature_k[k]))
     theta_k = theta_k.reshape((-1, 240))
     theta_lines = np.mean(theta_k, axis=1)
-    theta_kn[k, :] = theta_lines[:]
+    theta_kn[k, :] = theta_lines[1000:]
 
 # theta_kn = np.array(theta_kn)
 # print theta_kn.shape
@@ -117,6 +118,8 @@ for i in range(nbins_per_angle):
 # Initialize MBAR
 
 mbar = pymbar.MBAR(u_kln, N_k, verbose=False)
+Deltaf_ij, dDeltaf_ij, Theta_ij = mbar.getFreeEnergyDifferences()
+print Deltaf_ij
 
 # Compute PMF at the desired temperature.
 
@@ -125,6 +128,8 @@ u_kn = target_beta * U_kn
 (f_i, df_i) = mbar.computePMF(u_kn, bin_kn, nbins, uncertainties='from-lowest')
 # print f_i
 
-plt.fill_between(bin_centers, f_i - 2*df_i, f_i + 2*df_i, alpha=.4)
-# plt.plot(bin_centers, f_i, color="#2020CC", linewidth=4)
+if args.show_err:
+    plt.fill_between(bin_centers, f_i - 2*df_i, f_i + 2*df_i, alpha=.4)
+else:
+    plt.plot(bin_centers, f_i, color="#2020CC", linewidth=4)
 plt.show()
