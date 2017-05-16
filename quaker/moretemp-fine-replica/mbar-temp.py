@@ -6,6 +6,7 @@ import pymbar # for MBAR analysis
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import argparse
+import matplotlib.tri
 import scipy.integrate as integrate
 from scipy.optimize import curve_fit
 
@@ -18,7 +19,7 @@ args = parser.parse_args()
 free_energies_filename = 'f_k.out'
 
 T = 2001		# number of snapshots
-nbins_per_angle = 250	# number of bins per angle dimension
+nbins_per_angle = 500	# number of bins per angle dimension
 target_temperature = args.temp
 
 def read_file(filename):
@@ -148,7 +149,7 @@ Deltaf_ij, dDeltaf_ij, Theta_ij = mbar.getFreeEnergyDifferences()
 target_beta = 1.0 / (kB * target_temperature)
 u_kn = target_beta * U_kn
 (f_i, df_i) = mbar.computePMF(u_kn, bin_kn, nbins, uncertainties='from-lowest')
-print f_i, bin_centers
+# print f_i, bin_centers
 prob_i = np.exp(-f_i)
 dprob_i = np.exp(-f_i) * np.std(f_i)
 # print len(prob_i)
@@ -183,9 +184,16 @@ def gauss(x, x0, s, a):
 # 
 
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+# ax = fig.add_subplot(111, projection='3d')
+ax = fig.gca(projection='3d')
 bin_centers = np.array(bin_centers)
 print bin_centers[:,0]
+# print len(bin_centers[:,0]), len(f_i)
+thz = bin_centers[:,0]
+thx = bin_centers[:,1]
+thZ, thX = np.meshgrid(thz, thx)
+# print thZ.shape, thz.shape, f_i.shape
+# f_I = griddata(thz, thx, f_i, thZ, thX)
 
 if args.show_err:
     if args.prob:
@@ -194,12 +202,12 @@ if args.show_err:
         plt.fill_between(bin_centers, f_i - 2*df_i, f_i + 2*df_i, alpha=.4)
 else:
     if args.prob:
-        ax.plot_surface(bin_centers[:,0], bin_centers[:,1], f_i)
+        ax.plot_trisurf(thz, thx, f_i, antialiased=True, linewidth=0)
 #         plt.plot(bin_centers, prob_i, color="#2020CC", linewidth=4, alpha=.4)
 #         plt.plot(x_ord, fit_ord, color='r')
 #         plt.plot(x_disord, fit_disord, color='r')
-    else:
-        plt.plot(bin_centers, f_i, color="#2020CC", linewidth=4)
+#     else:
+#         plt.plot(bin_centers, f_i, color="#2020CC", linewidth=4)
 plt.show()
 
 # area_ord = integrate.simps(prob_i[:4], bin_centers[:4])
