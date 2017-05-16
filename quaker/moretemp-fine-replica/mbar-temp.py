@@ -184,6 +184,8 @@ def gauss(x, x0, s, a):
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
+bin_centers = np.array(bin_centers)
+print bin_centers[:,0]
 
 if args.show_err:
     if args.prob:
@@ -192,7 +194,7 @@ if args.show_err:
         plt.fill_between(bin_centers, f_i - 2*df_i, f_i + 2*df_i, alpha=.4)
 else:
     if args.prob:
-        ax.plot_surface(bin_centers[:][0], bin_centers[:][1], f_i)
+        ax.plot_surface(bin_centers[:,0], bin_centers[:,1], f_i)
 #         plt.plot(bin_centers, prob_i, color="#2020CC", linewidth=4, alpha=.4)
 #         plt.plot(x_ord, fit_ord, color='r')
 #         plt.plot(x_disord, fit_disord, color='r')
