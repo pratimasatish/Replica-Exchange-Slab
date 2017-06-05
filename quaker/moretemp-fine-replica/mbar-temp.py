@@ -20,7 +20,8 @@ free_energies_filename = 'f_k.out'
 
 T = 2001		# number of snapshots
 nbins_per_angle = 500	# number of bins per angle dimension
-target_temperature = args.temp
+# target_temperature = args.temp
+target_temperature = 350.1
 
 def read_file(filename):
     infile = open(filename, 'r')
@@ -187,27 +188,34 @@ fig = plt.figure()
 # ax = fig.add_subplot(111, projection='3d')
 ax = fig.gca(projection='3d')
 bin_centers = np.array(bin_centers)
-print bin_centers[:,0]
+# print bin_centers[:,0]
 # print len(bin_centers[:,0]), len(f_i)
 thz = bin_centers[:,0]
 thx = bin_centers[:,1]
 thZ, thX = np.meshgrid(thz, thx)
+cols = np.unique(thz).shape[0]
+print cols
 # print thZ.shape, thz.shape, f_i.shape
-# f_I = griddata(thz, thx, f_i, thZ, thX)
+print thZ.shape, thX.shape, f_i.shape
+# f_I = f_i.reshape(thZ.shape) 
+# print f_I.shape
 
-if args.show_err:
-    if args.prob:
-        plt.fill_between(bin_centers, prob_i - 2*dprob_i, prob_i + 2*dprob_i, alpha=.4)
-    else:
-        plt.fill_between(bin_centers, f_i - 2*df_i, f_i + 2*df_i, alpha=.4)
-else:
-    if args.prob:
-        ax.plot_trisurf(thz, thx, f_i, antialiased=True, linewidth=0)
-#         plt.plot(bin_centers, prob_i, color="#2020CC", linewidth=4, alpha=.4)
-#         plt.plot(x_ord, fit_ord, color='r')
-#         plt.plot(x_disord, fit_disord, color='r')
+if args.prob:
+    ax.plot_trisurf(thz, thx, f_i, antialiased=True, linewidth=0)
+
+# if args.show_err:
+#     if args.prob:
+#         plt.fill_between(bin_centers, prob_i - 2*dprob_i, prob_i + 2*dprob_i, alpha=.4)
 #     else:
-#         plt.plot(bin_centers, f_i, color="#2020CC", linewidth=4)
+#         plt.fill_between(bin_centers, f_i - 2*df_i, f_i + 2*df_i, alpha=.4)
+# else:
+#     if args.prob:
+#         ax.plot_trisurf(thz, thx, f_i, antialiased=True, linewidth=0)
+# #         plt.plot(bin_centers, prob_i, color="#2020CC", linewidth=4, alpha=.4)
+# #         plt.plot(x_ord, fit_ord, color='r')
+# #         plt.plot(x_disord, fit_disord, color='r')
+# #     else:
+# #         plt.plot(bin_centers, f_i, color="#2020CC", linewidth=4)
 plt.show()
 
 # area_ord = integrate.simps(prob_i[:4], bin_centers[:4])
