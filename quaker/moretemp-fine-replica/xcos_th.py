@@ -8,7 +8,7 @@ parser.add_argument("-temp", type=str, help="temp value to analyse")
 parser.add_argument("-log", action='store_true', help="plot log of probability")
 parser.add_argument("-start", type=int, default=0, help="where to start calculating angles (after equilibriation)")
 parser.add_argument("-show", action='store_true', help="whether to show plot or not")
-parser.add_argument("-reshape", action='store_true', help="whether to spatially average theta_z values or not")
+parser.add_argument("-reshape", action='store_true', help="whether to spatially average theta_x values or not")
 args = parser.parse_args()
 
 save = "hist" + args.temp + ".png"

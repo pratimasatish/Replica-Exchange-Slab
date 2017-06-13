@@ -12,6 +12,7 @@ from scipy.optimize import curve_fit
 
 parser = argparse.ArgumentParser(description="")
 parser.add_argument("-temp", type=float, help="target temp at which to get free energy curve")
+parser.add_argument("-dim", type=float, default=1, help="order parameter dimensionality [1d = th_z, 2d = th_z and th_x]")
 parser.add_argument("-show_err", action='store_true', help="to show free energy curve with error bars or not")
 parser.add_argument("-prob", action='store_true', help="to show free energy or probability distribution")
 args = parser.parse_args()
@@ -20,8 +21,8 @@ free_energies_filename = 'f_k.out'
 
 T = 2001		# number of snapshots
 nbins_per_angle = 500	# number of bins per angle dimension
-# target_temperature = args.temp
-target_temperature = 350.1
+target_temperature = args.temp
+# target_temperature = 350.1
 
 def read_file(filename):
     infile = open(filename, 'r')
@@ -108,30 +109,56 @@ nbins = 0
 bin_counts = list()
 bin_centers = list()		# bin_centers[i] is a theta_z value that gives the center of bin i
 # indices = np.arange(T)
-for i in range(nbins_per_angle):
-    for j in range(nbins_per_angle):
-        val = angle_min + dx * (i + 0.5)
-        val_x = angle_min + dx * (j + 0.5)
-        # Determine which configurations lie in this bin.
-        in_bin = (val-dx/2 <= theta_kn[indices]) & (theta_kn[indices] < val+dx/2) & (val_x-dx/2 <= theta_x_kn[indices]) & (theta_x_kn[indices] < val_x+dx/2)
-  
-        # Count number of configurations in this bin.
-        bin_count = in_bin.sum()
-  
-        # Generate list of indices in bin.
-        indices_in_bin = (indices[0][in_bin], indices[1][in_bin])
-  
-        if (bin_count > 0):
-           bin_centers.append( (val, val_x) )
-           bin_counts.append( bin_count )
-  
-           # assign these conformations to the bin index
-           bin_kn[indices_in_bin] = nbins
-  
-           # increment number of bins
-           nbins += 1
+
+if (args.dim == 2):
+    # Get bins for 2d order parameter space (theta_z and theta_x)
+    for i in range(nbins_per_angle):
+        for j in range(nbins_per_angle):
+            val = angle_min + dx * (i + 0.5)
+            val_x = angle_min + dx * (j + 0.5)
+            # Determine which configurations lie in this bin.
+            in_bin = (val-dx/2 <= theta_kn[indices]) & (theta_kn[indices] < val+dx/2) & (val_x-dx/2 <= theta_x_kn[indices]) & (theta_x_kn[indices] < val_x+dx/2)
+      
+            # Count number of configurations in this bin.
+            bin_count = in_bin.sum()
+      
+            # Generate list of indices in bin.
+            indices_in_bin = (indices[0][in_bin], indices[1][in_bin])
+      
+            if (bin_count > 0):
+                bin_centers.append( (val, val_x) )
+                bin_counts.append( bin_count )
+      
+                # assign these conformations to the bin index
+                bin_kn[indices_in_bin] = nbins
+      
+                # increment number of bins
+                nbins += 1
 
 # print bin_centers
+
+else:
+    # Get bins for 1d order parameter space (theta_z and theta_x)
+    for i in range(nbins_per_angle):
+        val = angle_min + dx * (i + 0.5)
+        # Determine which configurations lie in this bin.
+        in_bin = (val-dx/2 <= theta_kn[indices]) & (theta_kn[indices] < val+dx/2) 
+      
+        # Count number of configurations in this bin.
+        bin_count = in_bin.sum()
+    
+        # Generate list of indices in bin.
+        indices_in_bin = (indices[0][in_bin], indices[1][in_bin])
+    
+        if (bin_count > 0):
+            bin_centers.append( val )
+            bin_counts.append( bin_count )
+     
+            # assign these conformations to the bin index
+            bin_kn[indices_in_bin] = nbins
+     
+            # increment number of bins
+            nbins += 1
 
 # Initialize MBAR
 
@@ -150,7 +177,7 @@ Deltaf_ij, dDeltaf_ij, Theta_ij = mbar.getFreeEnergyDifferences()
 target_beta = 1.0 / (kB * target_temperature)
 u_kn = target_beta * U_kn
 (f_i, df_i) = mbar.computePMF(u_kn, bin_kn, nbins, uncertainties='from-lowest')
-# print f_i, bin_centers
+print f_i, bin_centers
 prob_i = np.exp(-f_i)
 dprob_i = np.exp(-f_i) * np.std(f_i)
 # print len(prob_i)
@@ -184,24 +211,23 @@ def gauss(x, x0, s, a):
 # print area_ord, area_disord
 # 
 
-fig = plt.figure()
-# ax = fig.add_subplot(111, projection='3d')
-ax = fig.gca(projection='3d')
-bin_centers = np.array(bin_centers)
-# print bin_centers[:,0]
-# print len(bin_centers[:,0]), len(f_i)
-thz = bin_centers[:,0]
-thx = bin_centers[:,1]
-thZ, thX = np.meshgrid(thz, thx)
-cols = np.unique(thz).shape[0]
-print cols
-# print thZ.shape, thz.shape, f_i.shape
-print thZ.shape, thX.shape, f_i.shape
-# f_I = f_i.reshape(thZ.shape) 
-# print f_I.shape
+if (args.dim == 2):
+    fig = plt.figure()
+    # ax = fig.add_subplot(111, projection='3d')
+    ax = fig.gca(projection='3d')
+    bin_centers = np.array(bin_centers)
+    # print bin_centers[:,0]
+    # print len(bin_centers[:,0]), len(f_i)
+    thz = bin_centers[:,0]
+    thx = bin_centers[:,1]
+    thZ, thX = np.meshgrid(thz, thx)
+    cols = np.unique(thz).shape[0]
+    print cols
+    # print thZ.shape, thz.shape, f_i.shape
+    print thZ.shape, thX.shape, f_i.shape
 
-if args.prob:
-    ax.plot_trisurf(thz, thx, f_i, antialiased=True, linewidth=0)
+    # if args.prob:
+    #     ax.plot_trisurf(thz, thx, f_i, antialiased=True, linewidth=0)
 
 # if args.show_err:
 #     if args.prob:
@@ -218,7 +244,7 @@ if args.prob:
 # #         plt.plot(bin_centers, f_i, color="#2020CC", linewidth=4)
 plt.show()
 
-# area_ord = integrate.simps(prob_i[:4], bin_centers[:4])
-# area_disord = integrate.simps(prob_i[4:], bin_centers[4:])
-# 
-# print area_ord, area_disord
+area_ord = integrate.simps(prob_i[:7], bin_centers[:7])
+area_disord = integrate.simps(prob_i[7:], bin_centers[7:])
+
+print area_ord, area_disord
