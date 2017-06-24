@@ -26,7 +26,7 @@ namelist_1 = np.arange(-0.8500, -0.0240, 0.0250)
 namelist_2 = np.arange(0.0, 0.1040, 0.0250)
 namelist = np.concatenate((namelist_1, namelist_2))
 k_list = np.ones(len(namelist)) * 15000.0
-N_bias = len(namelist) * 2
+N_bias = len(namelist) * 3
 T_bias = 5000
 # bias_theta_kn = np.zeros((N_sims, T))
 # bias_theta_x_kn = np.zeros((N_sims, T))
@@ -43,7 +43,7 @@ def read_file(filename):
 
 temperature_k = [349.5, 350.0, 350.5, 351.0, 351.5, 352.0, 352.5, 353.0]
 temperature_k = np.array(temperature_k)
-temperature_k = np.concatenate( (np.ones(N_bias/2) * 350.18, np.ones(N_bias/2) * 355, temperature_k) )
+temperature_k = np.concatenate( (np.ones(N_bias/3) * 350.18, np.ones(N_bias/3) * 355, np.ones(N_bias/3) * 355, temperature_k) )
 # temperature_k = np.concatenate((temperature_k, np.ones(N_bias) * 355))
 # print temperature_k
 K = len(temperature_k)
@@ -74,8 +74,18 @@ for k, biasval in enumerate(namelist):
     data = data.reshape((-1, 240))
     data_t = np.mean(data, axis=1)
     num = len(data_t) - 2001
-    print k+N_bias/2, biasval
-    theta_kn[k + N_bias/2, :] = data_t[num:]
+    print k+N_bias/3, biasval
+    theta_kn[k + N_bias/3, :] = data_t[num:]
+
+# Next for biased simulations at 350K
+
+for k, biasval in enumerate(namelist):
+    data = np.genfromtxt('theta-350.{:1.4f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_t = np.mean(data, axis=1)
+    num = len(data_t) - 2001
+    print k+2*N_bias/3, biasval
+    theta_kn[k + 2 * N_bias/3, :] = data_t[num:]
 
 # Last for replica exchange data
 
@@ -108,7 +118,16 @@ for k, biasval in enumerate(namelist):
     data_x = data_x.reshape((-1, 240))
     data_xt = np.mean(data_x, axis=1)
     num = len(data_xt) - 2001
-    theta_x_kn[k + N_bias/2, :] = data_xt[num:]
+    theta_x_kn[k + N_bias/3, :] = data_xt[num:]
+
+# Next for biased simulations at 350K
+
+for k, biasval in enumerate(namelist):
+    data_x = np.genfromtxt('theta_x-350.{:1.4f}.txt'.format(biasval))
+    data_x = data_x.reshape((-1, 240))
+    data_xt = np.mean(data_x, axis=1)
+    num = len(data_xt) - 2001
+    theta_x_kn[k + 2 * N_bias/3, :] = data_xt[num:]
 
 # Last for replica exchange data
 
@@ -135,7 +154,15 @@ for k, th in enumerate(namelist):
     lines = np.genfromtxt("pot-355.{:1.4f}".format(th))
     num = len(lines) - 2001
 #     print k, th
-    U_kn[k + N_bias/2, :] = lines[num:] + 0.5 * k_list[k] * (theta_kn[k + N_bias/2, :] - th) * (theta_kn[k + N_bias/2, :] - th)
+    U_kn[k + N_bias/3, :] = lines[num:] + 0.5 * k_list[k] * (theta_kn[k + N_bias/3, :] - th) * (theta_kn[k + N_bias/3, :] - th)
+
+# At 350K
+
+for k, th in enumerate(namelist):
+    lines = np.genfromtxt("pot-350.{:1.4f}".format(th))
+    num = len(lines) - 2001
+#     print k, th
+    U_kn[k + 2 * N_bias/3, :] = lines[num:] + 0.5 * k_list[k] * (theta_kn[k + 2 * N_bias/3, :] - th) * (theta_kn[k + 2 * N_bias/3, :] - th)
 
 # From replica exchange
 
@@ -175,8 +202,8 @@ for k in range(K):
 
 # Bin angles into histogram bins for PMF calculation
 
-angle_min = -np.pi
-angle_max = +np.pi
+angle_min = -0.9
+angle_max = +0.2
 dx = (angle_max - angle_min) / float(nbins_per_angle)
 # Assign angle bins
 bin_kn = np.zeros([K,N_max], np.int16)		# bin_kn[k,n] is the index of which histogram bin sample n from temperature index k belongs to
