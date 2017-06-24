@@ -22,6 +22,15 @@ free_energies_filename = 'f_k.out'
 T = 2001		# number of snapshots
 nbins_per_angle = 500	# number of bins per angle dimension
 target_temperature = args.temp
+namelist_1 = np.arange(-0.8500, -0.0240, 0.0250)
+namelist_2 = np.arange(0.0, 0.1040, 0.0250)
+namelist = np.concatenate((namelist_1, namelist_2))
+k_list = np.ones(len(namelist)) * 15000.0
+N_bias = len(namelist) * 2
+T_bias = 5000
+# bias_theta_kn = np.zeros((N_sims, T))
+# bias_theta_x_kn = np.zeros((N_sims, T))
+
 # target_temperature = 350.1
 
 def read_file(filename):
@@ -34,46 +43,112 @@ def read_file(filename):
 
 temperature_k = [349.5, 350.0, 350.5, 351.0, 351.5, 352.0, 352.5, 353.0]
 temperature_k = np.array(temperature_k)
+temperature_k = np.concatenate( (np.ones(N_bias/2) * 350.18, np.ones(N_bias/2) * 355, temperature_k) )
+# temperature_k = np.concatenate((temperature_k, np.ones(N_bias) * 355))
 # print temperature_k
 K = len(temperature_k)
+U_kn = np.zeros((K, T))		# U_kn[k,t] is the potential energy (in kcal/mol) for snapshot t of temperature index k
 
 # Compute inverse temperatures
 
 kB = 1.3806503 * 6.0221415 / 4184.0 # Boltzmann constant in kcal/mol/K
 beta_k = 1/ (kB * temperature_k)
 
-# Read potential energies
-
-U_kn = np.zeros((K, T))		# U_kn[k,t] is the potential energy (in kcal/mol) for snapshot t of temperature index k
-for k in range(K):
-    lines = read_file("pot-new.{:3.1f}.txt".format(temperature_k[k]))
-    num = len(lines) - 2001
-    U_kn[k, :] = lines[num:]
-
-U_kn = np.array(U_kn)
-# U_kn = np.transpose(U_kn)
-# print U_kn.shape
-
 # Read theta_z values
 
+# first for biased simulations at 350.18K
+
 theta_kn = np.zeros((K, T))	# contains order parameter values in radians for snapshot t of temperature index k
-for k in range(K):
-    theta_k = np.genfromtxt("theta{:3.1f}.txt".format(temperature_k[k]))
+for k, biasval in enumerate(namelist):
+    data = np.genfromtxt('theta-350.18.{:1.4f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_t = np.mean(data, axis=1)
+    num = len(data_t) - 2001
+    print k, biasval
+    theta_kn[k, :] = data_t[num:]
+
+# Next for biased simulations at 355K
+
+for k, biasval in enumerate(namelist):
+    data = np.genfromtxt('theta-355.{:1.4f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_t = np.mean(data, axis=1)
+    num = len(data_t) - 2001
+    print k+N_bias/2, biasval
+    theta_kn[k + N_bias/2, :] = data_t[num:]
+
+# Last for replica exchange data
+
+for k in range(8):
+    theta_k = np.genfromtxt("theta{:3.1f}.txt".format(temperature_k[k + N_bias]))
     theta_k = theta_k.reshape((-1, 240))
     theta_lines = np.mean(theta_k, axis=1)
     num = len(theta_lines) - 2001
-    theta_kn[k, :] = theta_lines[num:]
+    print k+N_bias
+    theta_kn[k + N_bias, :] = theta_lines[num:]
 
 # theta_kn = np.array(theta_kn)
 # print theta_kn.shape
 
 theta_x_kn = np.zeros((K, T))	# contains order parameter values in radians for snapshot t of temperature index k
-for k in range(K):
-    theta_x_k = np.genfromtxt("theta_x{:3.1f}.txt".format(temperature_k[k]))
+
+# First for biased simulations at 350.18K
+
+for k, biasval in enumerate(namelist):
+    data_x = np.genfromtxt('theta_x-350.18.{:1.4f}.txt'.format(biasval))
+    data_x = data_x.reshape((-1, 240))
+    data_xt = np.mean(data_x, axis=1)
+    num = len(data_xt) - 2001
+    theta_x_kn[k, :] = data_xt[num:]
+
+# Next for biased simulations at 355K
+
+for k, biasval in enumerate(namelist):
+    data_x = np.genfromtxt('theta_x-355.{:1.4f}.txt'.format(biasval))
+    data_x = data_x.reshape((-1, 240))
+    data_xt = np.mean(data_x, axis=1)
+    num = len(data_xt) - 2001
+    theta_x_kn[k + N_bias/2, :] = data_xt[num:]
+
+# Last for replica exchange data
+
+for k in range(8):
+    theta_x_k = np.genfromtxt("theta_x{:3.1f}.txt".format(temperature_k[k + N_bias]))
     theta_x_k = theta_x_k.reshape((-1, 240))
     theta_x_lines = np.mean(theta_x_k, axis=1)
     num = len(theta_x_lines) - 2001
-    theta_x_kn[k, :] = theta_x_lines[num:]
+    theta_x_kn[k + N_bias, :] = theta_x_lines[num:]
+
+# Read potential energies, first from umbrella sampling at 350.18K, then from replica exchange
+
+# At 350.18K
+
+for k, th in enumerate(namelist):
+    lines = np.genfromtxt("pot-350.18.{:1.4f}".format(th))
+    num = len(lines) - 2001
+#     print k, th
+    U_kn[k, :] = lines[num:] + 0.5 * k_list[k] * (theta_kn[k, :] - th) * (theta_kn[k, :] - th)
+
+# At 355K
+
+for k, th in enumerate(namelist):
+    lines = np.genfromtxt("pot-355.{:1.4f}".format(th))
+    num = len(lines) - 2001
+#     print k, th
+    U_kn[k + N_bias/2, :] = lines[num:] + 0.5 * k_list[k] * (theta_kn[k + N_bias/2, :] - th) * (theta_kn[k + N_bias/2, :] - th)
+
+# From replica exchange
+
+for k in range(8):
+    lines = np.genfromtxt("pot-new.{:3.1f}.txt".format(temperature_k[k + N_bias]))
+    num = len(lines) - 2001
+    U_kn[k + N_bias, :] = lines[num:]
+
+U_kn = np.array(U_kn)
+# U_kn = np.transpose(U_kn)
+# print U_kn.shape
+
+# Initialise MBAR arrays
 
 N_k = np.zeros([K], np.int32)
 N_k[:] = T
