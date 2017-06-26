@@ -25,8 +25,8 @@ target_temperature = args.temp
 namelist_1 = np.arange(-0.8500, -0.0240, 0.0250)
 namelist_2 = np.arange(0.0, 0.1040, 0.0250)
 namelist = np.concatenate((namelist_1, namelist_2))
-k_list = np.ones(len(namelist)) * 15000.0
 N_bias = len(namelist) * 3
+k_list = np.ones(N_bias) * 15000.0
 T_bias = 5000
 # bias_theta_kn = np.zeros((N_sims, T))
 # bias_theta_x_kn = np.zeros((N_sims, T))
@@ -43,7 +43,7 @@ def read_file(filename):
 
 temperature_k = [349.5, 350.0, 350.5, 351.0, 351.5, 352.0, 352.5, 353.0]
 temperature_k = np.array(temperature_k)
-temperature_k = np.concatenate( (np.ones(N_bias/3) * 350.18, np.ones(N_bias/3) * 355, np.ones(N_bias/3) * 355, temperature_k) )
+temperature_k = np.concatenate( (np.ones(N_bias/3) * 350.18, np.ones(N_bias/3) * 355, np.ones(N_bias/3) * 350, temperature_k) )
 # temperature_k = np.concatenate((temperature_k, np.ones(N_bias) * 355))
 # print temperature_k
 K = len(temperature_k)
@@ -145,8 +145,8 @@ for k in range(8):
 for k, th in enumerate(namelist):
     lines = np.genfromtxt("pot-350.18.{:1.4f}".format(th))
     num = len(lines) - 2001
-#     print k, th
-    U_kn[k, :] = lines[num:] + 0.5 * k_list[k] * (theta_kn[k, :] - th) * (theta_kn[k, :] - th)
+    U_kn[k, :] = lines[num:] - 0.5 * k_list[k] * (theta_kn[k, :] - th) * (theta_kn[k, :] - th)
+    print U_kn[k, 5], lines[num+5], - 0.5 * k_list[k] * (theta_kn[k, 5] - th) * (theta_kn[k, 5] - th)
 
 # At 355K
 
@@ -154,7 +154,7 @@ for k, th in enumerate(namelist):
     lines = np.genfromtxt("pot-355.{:1.4f}".format(th))
     num = len(lines) - 2001
 #     print k, th
-    U_kn[k + N_bias/3, :] = lines[num:] + 0.5 * k_list[k] * (theta_kn[k + N_bias/3, :] - th) * (theta_kn[k + N_bias/3, :] - th)
+    U_kn[k + N_bias/3, :] = lines[num:] - 0.5 * k_list[k + N_bias/3] * (theta_kn[k + N_bias/3, :] - th) * (theta_kn[k + N_bias/3, :] - th)
 
 # At 350K
 
@@ -162,7 +162,7 @@ for k, th in enumerate(namelist):
     lines = np.genfromtxt("pot-350.{:1.4f}".format(th))
     num = len(lines) - 2001
 #     print k, th
-    U_kn[k + 2 * N_bias/3, :] = lines[num:] + 0.5 * k_list[k] * (theta_kn[k + 2 * N_bias/3, :] - th) * (theta_kn[k + 2 * N_bias/3, :] - th)
+    U_kn[k + 2 * N_bias/3, :] = lines[num:] - 0.5 * k_list[k + 2 * N_bias / 3] * (theta_kn[k + 2 * N_bias/3, :] - th) * (theta_kn[k + 2 * N_bias/3, :] - th)
 
 # From replica exchange
 
@@ -199,6 +199,13 @@ for k in range(K):
       u_kln[k,l,0:N_k[k]] = beta_k[l] * U_kn[k,0:N_k[k]]
 
 # print u_kln.shape
+
+full_namelist = np.concatenate((namelist, namelist, namelist))
+thbar_kln = full_namelist.astype(float)[np.newaxis, :, np.newaxis]
+k_list_kln = k_list[np.newaxis, :, np.newaxis]
+dtheta_kln = theta_kn[0:N_bias, np.newaxis, :] - thbar_kln
+bias_kln = 0.5 * k_list_kln * np.square(dtheta_kln) * beta_k[0:N_bias, np.newaxis, np.newaxis]
+u_kln[0:N_bias, 0:N_bias, :] = u_kln[0:N_bias, 0:N_bias, :] + bias_kln
 
 # Bin angles into histogram bins for PMF calculation
 
