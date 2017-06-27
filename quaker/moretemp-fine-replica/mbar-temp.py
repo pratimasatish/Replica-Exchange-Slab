@@ -58,14 +58,16 @@ beta_k = 1/ (kB * temperature_k)
 
 # first for biased simulations at 350.18K
 
+count = 0
 theta_kn = np.zeros((K, T))	# contains order parameter values in radians for snapshot t of temperature index k
 for k, biasval in enumerate(namelist):
     data = np.genfromtxt('theta-350.18.{:1.4f}.txt'.format(biasval))
     data = data.reshape((-1, 240))
     data_t = np.mean(data, axis=1)
     num = len(data_t) - 2001
-    print k, biasval
-    theta_kn[k, :] = data_t[num:]
+    print count, biasval
+    theta_kn[count, :] = data_t[num:]
+    count = count + 1
 
 # Next for biased simulations at 355K
 
@@ -74,9 +76,9 @@ for k, biasval in enumerate(namelist):
     data = data.reshape((-1, 240))
     data_t = np.mean(data, axis=1)
     num = len(data_t) - 2001
-    print k+N_bias/3, biasval
-    theta_kn[k + N_bias/3, :] = data_t[num:]
-
+    print count, biasval
+    theta_kn[count, :] = data_t[num:]
+    count = count + 1
 # Next for biased simulations at 350K
 
 for k, biasval in enumerate(namelist):
@@ -84,8 +86,9 @@ for k, biasval in enumerate(namelist):
     data = data.reshape((-1, 240))
     data_t = np.mean(data, axis=1)
     num = len(data_t) - 2001
-    print k+2*N_bias/3, biasval
-    theta_kn[k + 2 * N_bias/3, :] = data_t[num:]
+    print count, biasval
+    theta_kn[count, :] = data_t[num:]
+    count = count + 1
 
 # Last for replica exchange data
 
@@ -94,13 +97,15 @@ for k in range(8):
     theta_k = theta_k.reshape((-1, 240))
     theta_lines = np.mean(theta_k, axis=1)
     num = len(theta_lines) - 2001
-    print k+N_bias
-    theta_kn[k + N_bias, :] = theta_lines[num:]
+    print count
+    theta_kn[count, :] = theta_lines[num:]
+    count = count + 1
 
 # theta_kn = np.array(theta_kn)
 # print theta_kn.shape
 
 theta_x_kn = np.zeros((K, T))	# contains order parameter values in radians for snapshot t of temperature index k
+count = 0
 
 # First for biased simulations at 350.18K
 
@@ -109,7 +114,8 @@ for k, biasval in enumerate(namelist):
     data_x = data_x.reshape((-1, 240))
     data_xt = np.mean(data_x, axis=1)
     num = len(data_xt) - 2001
-    theta_x_kn[k, :] = data_xt[num:]
+    theta_x_kn[count, :] = data_xt[num:]
+    count = count + 1
 
 # Next for biased simulations at 355K
 
@@ -118,7 +124,8 @@ for k, biasval in enumerate(namelist):
     data_x = data_x.reshape((-1, 240))
     data_xt = np.mean(data_x, axis=1)
     num = len(data_xt) - 2001
-    theta_x_kn[k + N_bias/3, :] = data_xt[num:]
+    theta_x_kn[count, :] = data_xt[num:]
+    count = count + 1
 
 # Next for biased simulations at 350K
 
@@ -127,7 +134,8 @@ for k, biasval in enumerate(namelist):
     data_x = data_x.reshape((-1, 240))
     data_xt = np.mean(data_x, axis=1)
     num = len(data_xt) - 2001
-    theta_x_kn[k + 2 * N_bias/3, :] = data_xt[num:]
+    theta_x_kn[count, :] = data_xt[num:]
+    count = count + 1
 
 # Last for replica exchange data
 
@@ -136,17 +144,22 @@ for k in range(8):
     theta_x_k = theta_x_k.reshape((-1, 240))
     theta_x_lines = np.mean(theta_x_k, axis=1)
     num = len(theta_x_lines) - 2001
-    theta_x_kn[k + N_bias, :] = theta_x_lines[num:]
+    theta_x_kn[count, :] = theta_x_lines[num:]
+    count = count + 1
 
 # Read potential energies, first from umbrella sampling at 350.18K, then from replica exchange
+
+count = 0
 
 # At 350.18K
 
 for k, th in enumerate(namelist):
     lines = np.genfromtxt("pot-350.18.{:1.4f}".format(th))
     num = len(lines) - 2001
-    U_kn[k, :] = lines[num:] - 0.5 * k_list[k] * (theta_kn[k, :] - th) * (theta_kn[k, :] - th)
-    print U_kn[k, 5], lines[num+5], - 0.5 * k_list[k] * (theta_kn[k, 5] - th) * (theta_kn[k, 5] - th)
+#     U_kn[k, :] = lines[num:]
+    U_kn[count, :] = lines[num:] - 0.5 * k_list[count] * (theta_kn[count, :] - th) * (theta_kn[count, :] - th)
+    count = count + 1
+#     print U_kn[k, 5], lines[num+5], - 0.5 * k_list[k] * (theta_kn[k, 5] - th) * (theta_kn[k, 5] - th)
 
 # At 355K
 
@@ -154,7 +167,9 @@ for k, th in enumerate(namelist):
     lines = np.genfromtxt("pot-355.{:1.4f}".format(th))
     num = len(lines) - 2001
 #     print k, th
-    U_kn[k + N_bias/3, :] = lines[num:] - 0.5 * k_list[k + N_bias/3] * (theta_kn[k + N_bias/3, :] - th) * (theta_kn[k + N_bias/3, :] - th)
+#     U_kn[k + N_bias/3, :] = lines[num:]
+    U_kn[count, :] = lines[num:] - 0.5 * k_list[count] * (theta_kn[count, :] - th) * (theta_kn[count, :] - th)
+    count = count + 1
 
 # At 350K
 
@@ -162,14 +177,17 @@ for k, th in enumerate(namelist):
     lines = np.genfromtxt("pot-350.{:1.4f}".format(th))
     num = len(lines) - 2001
 #     print k, th
-    U_kn[k + 2 * N_bias/3, :] = lines[num:] - 0.5 * k_list[k + 2 * N_bias / 3] * (theta_kn[k + 2 * N_bias/3, :] - th) * (theta_kn[k + 2 * N_bias/3, :] - th)
+#     U_kn[k + 2 * N_bias/3, :] = lines[num:]
+    U_kn[count, :] = lines[num:] - 0.5 * k_list[count] * (theta_kn[count, :] - th) * (theta_kn[count, :] - th)
+    count = count + 1
 
 # From replica exchange
 
 for k in range(8):
     lines = np.genfromtxt("pot-new.{:3.1f}.txt".format(temperature_k[k + N_bias]))
     num = len(lines) - 2001
-    U_kn[k + N_bias, :] = lines[num:]
+    U_kn[count, :] = lines[num:]
+    count = count + 1
 
 U_kn = np.array(U_kn)
 # U_kn = np.transpose(U_kn)
@@ -353,7 +371,10 @@ if (args.dim == 2):
 # #         plt.plot(bin_centers, f_i, color="#2020CC", linewidth=4)
 plt.show()
 
-area_ord = integrate.simps(prob_i[:7], bin_centers[:7])
-area_disord = integrate.simps(prob_i[7:], bin_centers[7:])
+ord_indices = np.where(bin_centers < -0.557)
+disord_indices = np.where(bin_centers > -0.557)
+
+area_ord = integrate.simps(prob_i[ord_indices], bin_centers[ord_indices])
+area_disord = integrate.simps(prob_i[disord_indices], bin_centers[disord_indices])
 
 print area_ord, area_disord
