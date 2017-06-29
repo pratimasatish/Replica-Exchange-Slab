@@ -13,9 +13,22 @@ args = parser.parse_args()
 
 # initialise list of temperatures 
 kB = 1.3806503 * 6.0221415 / 4184.0
-temp_list = [349.5, 350.0, 350.5, 351.0, 351.5, 352.0, 352.5, 353.0]
-temp_list = np.array(temp_list)
+rep_temp_list = [349.5, 350.0, 350.5, 351.0, 351.5, 352.0, 352.5, 353.0]
+N_rep = len(rep_temp_list)
+temp_list = np.array(rep_temp_list)
+
+namelist_1 = np.arange(-0.8500, -0.0240, 0.0250)
+namelist_2 = np.arange(0.0, 0.1040, 0.0250)
+namelist = np.concatenate(( namelist_1, namelist_2 ))
+N_bias = len(namelist)
+namelist = np.concatenate(( namelist, np.zeros(N_rep) ))
+T_bias = 5000
+
+temp_list = np.concatenate(( np.ones(N_bias) * 350.18, rep_temp_list ))
 beta_list = 1/(kB * temp_list)
+
+k_list = np.ones(N_bias) * 15000.0
+k_list = np.concatenate(( k_list, np.zeros(N_rep) ))
 
 N_sims = len(temp_list)
 T = 2000
@@ -26,15 +39,34 @@ UO_ik = []
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
-for k, temp in enumerate(temp_list):
+# build up theta matrix
+
+for k, biasval in enumerate(namelist[:N_bias]):
+    data = np.genfromtxt('theta-350.18.{:1.4f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
+for k, temp in enumerate(rep_temp_list):
     data = np.genfromtxt('theta{:3.1f}.txt'.format(temp))
     data = data.reshape((-1, 240))
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i[len(data_i) - T:] )
 
-for k, temp in enumerate(temp_list):
+# build up potential matrix
+
+for k, th in enumerate(namelist[:N_bias]):
+    lines = np.genfromtxt("pot-350.18.{:1.4f}".format(th))
+    VO_ik.append( lines )
+    dtheta_i = np.array(theta_ik[k]) - th
+    UO_ik.append( lines - 0.5 * k_list[k] * np.square(dtheta_i) )
+
+th = 0
+for k, temp in enumerate(rep_temp_list):
     lines = np.genfromtxt("pot-new.{:3.1f}.txt".format(temp))
     VO_ik.append( lines[len(lines) - T:] )
+    dtheta_i = np.array(theta_ik[k + N_bias]) - th
+    UO_ik.append( lines[len(lines) - T:] - 0.5 * k_list[k + N_bias] * np.square(dtheta_i) )
 
 N_k = [ len(VO_i) for VO_i in VO_ik ]
 N_k = np.array(N_k)
@@ -45,35 +77,36 @@ N = u_mbar.shape[1]
 # make numpy arrays from data
 N_max = max(N_k)
 th_ik = np.zeros([K, N_max])
-vo_ik = np.zeros([K, N_max])
+uo_ik = np.zeros([K, N_max])
 k = 0
-for line1, line2 in zip(theta_ik, VO_ik):
-    th_ik[k,:] = np.array(line1)
-    vo_ik[k,:] = np.array(line2)
+for line1, line2 in zip(theta_ik, UO_ik):
+    th_ik[k,0:len(line1)] = np.array(line1)
+    uo_ik[k,0:len(line2)] = np.array(line2)
     k = k + 1
 
 # go row by row to evaluate configuration energy at each temperature
 for k in range(K):
     # populate off-diagonal blocks in MBAR array; go column by column, i.e. config by config
     for i in range(N_k[k]):
-        print k, i 
-        u_mbar[ :, sum(N_k[:k]) + i ] = beta_list * ( vo_ik[k,i] )
+        dtheta = th_ik[k, i] - namelist
+        print k, i
+        u_mbar[ :, sum(N_k[:k]) + i ] = beta_list * ( uo_ik[k,i] + 0.5 * k_list * np.square(dtheta) )
+#         u_mbar[ :, sum(N_k[:k]) + i ] = beta_list * ( vo_ik[k,i] )
 
 my_mbar = pymbar.MBAR(u_mbar, N_k)
 
-u_kn = []
+u_kn = np.zeros([K, N_max])
 target_temp = 350.18
 target_beta = 1/(kB*target_temp)
 # populate diagonal blocks in MBAR array
-for i in range(K):
-    u_kn.append(VO_ik[i] * target_beta)
-u_kn = np.array(u_kn)
-u_n = np.reshape(u_kn, N)
+for k in range(K):
+    u_kn[k] = target_beta * uo_ik[k]
+u_n = np.reshape(u_kn, N_sims*N_max)
+theta_n = [val for row in theta_ik for val in row]
+theta_n = np.array(theta_n)
 
 # one dimensional binning
 nbins = 100
-theta_n = [val for row in theta_ik for val in row]
-theta_n = np.array(theta_n)
 theta_n_sorted = np.sort(theta_n)
 bins = np.append(theta_n_sorted[0::int(N/nbins)], theta_n_sorted.max()+0.005)
 bin_widths = bins[1:] - bins[0:-1]
