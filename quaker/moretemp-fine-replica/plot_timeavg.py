@@ -26,5 +26,5 @@ data = data_txz
 mean_tz = np.mean(data, axis=1)
 mean_t = np.mean(mean_tz, axis=1)
 plt.figure()
-plt.plot(running_mean(mean_t, args.step))
+plt.plot(running_mean(mean_t, args.step), 'ro')
 plt.show()

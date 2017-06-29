@@ -265,7 +265,7 @@ if (args.dim == 2):
 # print bin_centers
 
 else:
-    # Get bins for 1d order parameter space (theta_z and theta_x)
+    # Get bins for 1d order parameter space (theta_z)
     for i in range(nbins_per_angle):
         val = angle_min + dx * (i + 0.5)
         # Determine which configurations lie in this bin.
