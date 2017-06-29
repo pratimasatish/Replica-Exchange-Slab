@@ -21,13 +21,13 @@ namelist_1 = np.arange(-0.8500, -0.0240, 0.0250)
 namelist_2 = np.arange(0.0, 0.1040, 0.0250)
 namelist = np.concatenate(( namelist_1, namelist_2 ))
 N_bias = len(namelist)
-namelist = np.concatenate(( namelist, np.zeros(N_rep) ))
+full_namelist = np.concatenate(( namelist, namelist, np.zeros(N_rep) ))
 T_bias = 5000
 
-temp_list = np.concatenate(( np.ones(N_bias) * 350.18, rep_temp_list ))
+temp_list = np.concatenate(( np.ones(N_bias) * 350.18, np.ones(N_bias) * 355.0,  rep_temp_list ))
 beta_list = 1/(kB * temp_list)
 
-k_list = np.ones(N_bias) * 15000.0
+k_list = np.ones(N_bias * 2) * 15000.0
 k_list = np.concatenate(( k_list, np.zeros(N_rep) ))
 
 N_sims = len(temp_list)
@@ -41,13 +41,19 @@ plt.rc('font', family='serif')
 
 # build up theta matrix
 
-for k, biasval in enumerate(namelist[:N_bias]):
+for biasval in full_namelist[:N_bias]:
     data = np.genfromtxt('theta-350.18.{:1.4f}.txt'.format(biasval))
     data = data.reshape((-1, 240))
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i )
 
-for k, temp in enumerate(rep_temp_list):
+for biasval in full_namelist[N_bias:2*N_bias]:
+    data = np.genfromtxt('theta-355.{:1.4f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
+for temp in rep_temp_list:
     data = np.genfromtxt('theta{:3.1f}.txt'.format(temp))
     data = data.reshape((-1, 240))
     data_i = np.mean(data, axis=1)
@@ -61,12 +67,18 @@ for k, th in enumerate(namelist[:N_bias]):
     dtheta_i = np.array(theta_ik[k]) - th
     UO_ik.append( lines - 0.5 * k_list[k] * np.square(dtheta_i) )
 
+for k, th in enumerate(namelist[:N_bias]):
+    lines = np.genfromtxt("pot-355.{:1.4f}".format(th))
+    VO_ik.append( lines )
+    dtheta_i = np.array(theta_ik[k + N_bias]) - th
+    UO_ik.append( lines - 0.5 * k_list[k + N_bias] * np.square(dtheta_i) )
+
 th = 0
 for k, temp in enumerate(rep_temp_list):
     lines = np.genfromtxt("pot-new.{:3.1f}.txt".format(temp))
     VO_ik.append( lines[len(lines) - T:] )
-    dtheta_i = np.array(theta_ik[k + N_bias]) - th
-    UO_ik.append( lines[len(lines) - T:] - 0.5 * k_list[k + N_bias] * np.square(dtheta_i) )
+    dtheta_i = np.array(theta_ik[k + 2*N_bias]) - th
+    UO_ik.append( lines[len(lines) - T:] - 0.5 * k_list[k + 2*N_bias] * np.square(dtheta_i) )
 
 N_k = [ len(VO_i) for VO_i in VO_ik ]
 N_k = np.array(N_k)
