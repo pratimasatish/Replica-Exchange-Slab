@@ -105,18 +105,6 @@ u_n = np.reshape(u_kn, N_sims*N_max)
 theta_n = [val for row in theta_ik for val in row]
 theta_n = np.array(theta_n)
 
-# one dimensional binning
-nbins = 100
-theta_n_sorted = np.sort(theta_n)
-bins = np.append(theta_n_sorted[0::int(N/nbins)], theta_n_sorted.max()+0.005)
-bin_widths = bins[1:] - bins[0:-1]
-bin_n = np.zeros(theta_n.shape, np.int64)
-bin_n = np.digitize(theta_n, bins) - 1
-
-[f_i, df_i] = my_mbar.computePMF(u_n, bin_n, nbins)
-f_i_corrected = f_i - np.log(bin_widths)
-theta_axis = bins[:-1] * .5 + bins[1:] * .5
-
 # two dimensional binning -- for some reason this binning works better probably because 
 # the whole theta_z range is not uniformly sampled by replica exchange simulations
 mask_kn = np.zeros([K,N_max], dtype=np.bool)
@@ -158,7 +146,8 @@ theta_axis = np.array(bin_centers)
 
 prob_i = np.exp(-f_i)
 plt.figure()
-plt.plot(theta_axis, prob_i)
+plt.plot(theta_axis, f_i)
+plt.plot(theta_axis, f_i, 'ro')
 plt.show()
 
 ord_indices = np.where(theta_axis < -0.557)
