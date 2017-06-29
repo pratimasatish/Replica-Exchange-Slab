@@ -7,9 +7,9 @@ from matplotlib import cm
 from scipy import interpolate
 from mpl_toolkits.mplot3d import Axes3D
 
-parser = argparse.ArgumentParser(description="")
-parser.add_argument("-dim", type=float, default=1, help="order parameter dimensionality [1d = th_z, 2d = th_z and th_x]")
-args = parser.parse_args()
+# parser = argparse.ArgumentParser(description="")
+# parser.add_argument("-dim", type=float, default=1, help="order parameter dimensionality [1d = th_z, 2d = th_z and th_x]")
+# args = parser.parse_args()
 
 # initialise list of temperatures 
 kB = 1.3806503 * 6.0221415 / 4184.0
@@ -21,13 +21,13 @@ namelist_1 = np.arange(-0.8500, -0.0240, 0.0250)
 namelist_2 = np.arange(0.0, 0.1040, 0.0250)
 namelist = np.concatenate(( namelist_1, namelist_2 ))
 N_bias = len(namelist)
-full_namelist = np.concatenate(( namelist, namelist, np.zeros(N_rep) ))
+full_namelist = np.concatenate(( namelist, namelist, namelist, np.zeros(N_rep) ))
 T_bias = 5000
 
-temp_list = np.concatenate(( np.ones(N_bias) * 350.18, np.ones(N_bias) * 355.0,  rep_temp_list ))
+temp_list = np.concatenate(( np.ones(N_bias) * 350.18, np.ones(N_bias) * 355.0, np.ones(N_bias) * 350.0,  rep_temp_list ))
 beta_list = 1/(kB * temp_list)
 
-k_list = np.ones(N_bias * 2) * 15000.0
+k_list = np.ones(N_bias * 3) * 15000.0
 k_list = np.concatenate(( k_list, np.zeros(N_rep) ))
 
 N_sims = len(temp_list)
@@ -53,6 +53,12 @@ for biasval in full_namelist[N_bias:2*N_bias]:
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i )
 
+for biasval in full_namelist[2*N_bias:3*N_bias]:
+    data = np.genfromtxt('theta-350.{:1.4f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
 for temp in rep_temp_list:
     data = np.genfromtxt('theta{:3.1f}.txt'.format(temp))
     data = data.reshape((-1, 240))
@@ -73,12 +79,18 @@ for k, th in enumerate(namelist[:N_bias]):
     dtheta_i = np.array(theta_ik[k + N_bias]) - th
     UO_ik.append( lines - 0.5 * k_list[k + N_bias] * np.square(dtheta_i) )
 
+for k, th in enumerate(namelist[:N_bias]):
+    lines = np.genfromtxt("pot-350.{:1.4f}".format(th))
+    VO_ik.append( lines )
+    dtheta_i = np.array(theta_ik[k + 2*N_bias]) - th
+    UO_ik.append( lines - 0.5 * k_list[k + 2*N_bias] * np.square(dtheta_i) )
+
 th = 0
 for k, temp in enumerate(rep_temp_list):
     lines = np.genfromtxt("pot-new.{:3.1f}.txt".format(temp))
     VO_ik.append( lines[len(lines) - T:] )
-    dtheta_i = np.array(theta_ik[k + 2*N_bias]) - th
-    UO_ik.append( lines[len(lines) - T:] - 0.5 * k_list[k + 2*N_bias] * np.square(dtheta_i) )
+    dtheta_i = np.array(theta_ik[k + 3*N_bias]) - th
+    UO_ik.append( lines[len(lines) - T:] - 0.5 * k_list[k + 3*N_bias] * np.square(dtheta_i) )
 
 N_k = [ len(VO_i) for VO_i in VO_ik ]
 N_k = np.array(N_k)
@@ -100,10 +112,9 @@ for line1, line2 in zip(theta_ik, UO_ik):
 for k in range(K):
     # populate off-diagonal blocks in MBAR array; go column by column, i.e. config by config
     for i in range(N_k[k]):
-        dtheta = th_ik[k, i] - namelist
+        dtheta = th_ik[k, i] - full_namelist
         print k, i
         u_mbar[ :, sum(N_k[:k]) + i ] = beta_list * ( uo_ik[k,i] + 0.5 * k_list * np.square(dtheta) )
-#         u_mbar[ :, sum(N_k[:k]) + i ] = beta_list * ( vo_ik[k,i] )
 
 my_mbar = pymbar.MBAR(u_mbar, N_k)
 
