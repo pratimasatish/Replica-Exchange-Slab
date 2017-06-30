@@ -35,6 +35,7 @@ T = 2000
 f_tot = []
 
 for n in range(10):
+    print n
     theta_ik = []
     VO_ik = []
     UO_ik = []
@@ -169,6 +170,7 @@ for n in range(10):
     [f_i, df_i] = my_mbar.computePMF(u_kn, bin_kn, nbins)
     theta_axis = np.array(bin_centers)
     f_tot.append(f_i)
+    print n
     
     # compute and plot PMF as function of theta_z
 
