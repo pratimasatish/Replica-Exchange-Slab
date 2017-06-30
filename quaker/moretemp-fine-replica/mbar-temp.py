@@ -311,10 +311,10 @@ dprob_i = np.exp(-f_i) * np.std(f_i)
 
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
-plt.xlabel(r'$\langle\theta_z\rangle$', fontsize=32)
-plt.ylabel(r'-\beta\Delta F(\langle\theta_z\rangle)$', fontsize=32)
-plt.xticks(fontsize=32, fontweight='bold')
-plt.yticks(fontsize=32, fontweight='bold')
+plt.xlabel(r'$\langle\theta_z\rangle$', fontsize=24)
+plt.ylabel(r'-\beta\Delta F(\langle\theta_z\rangle)$', fontsize=24)
+plt.xticks(fontsize=18, fontweight='bold')
+plt.yticks(fontsize=18, fontweight='bold')
 
 def gauss(x, x0, s, a):
     return a * np.exp(-(x - x0)**2 / (2 * s * s))
@@ -378,3 +378,7 @@ area_ord = integrate.simps(prob_i[ord_indices], bin_centers[ord_indices])
 area_disord = integrate.simps(prob_i[disord_indices], bin_centers[disord_indices])
 
 print area_ord, area_disord
+
+# plt.fill_between(rep_axis, f_rep - 2*df_rep, f_rep + 2*df_rep, color="#7fc97f", alpha=.7, label='only replica data')
+# plt.fill_between(umbr_axis, f_umbr - 2*df_umbr, f_umbr + 2*df_umbr, color="#beaed4", alpha=.7, label='only umbrella data')
+# plt.fill_between(tot_axis, f_av - 2*df_av, f_av + 2*df_av, color="#fdc086", alpha=.7, label='both combined')

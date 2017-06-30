@@ -135,9 +135,12 @@ for n in range(10):
     
     # two dimensional binning -- for some reason this binning works better probably because 
     # the whole theta_z range is not uniformly sampled by replica exchange simulations
+
+    # mask tells where the theta values are (b/c simulations are not necessarily same length)
     mask_kn = np.zeros([K,N_max], dtype=np.bool)
     for k in range(0,K):
        mask_kn[k,0:N_k[k]] = True
+
     # Create a list from this mask.
     indices = np.where(mask_kn)
     max_bins = 100
