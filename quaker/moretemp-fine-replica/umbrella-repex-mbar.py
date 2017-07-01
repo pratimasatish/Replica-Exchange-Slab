@@ -116,6 +116,57 @@ for k in range(K):
         print k, i
         u_mbar[ :, sum(N_k[:k]) + i ] = beta_list * ( uo_ik[k,i] + 0.5 * k_list * np.square(dtheta) )
 
+##### setting reduced range only if MBAR needs to be done in minima (not whole range)
+new_th = []
+new_uo = []
+for l1, l2 in zip(theta_ik, UO_ik):
+    new_th.append(l1[((l1>=-.5) * (l1<=-.05))])
+    new_uo.append(l2[((l1>=-.5) * (l1<=-.05))])
+
+umb_val = 0
+red_namelist = []
+red_templist = []
+for x in new_th:
+    if x != []:
+#         print umb_val, full_namelist[umb_val]
+        red_namelist.append(full_namelist[umb_val])
+        red_templist.append(temp_list[umb_val])
+    umb_val = umb_val + 1
+
+red_namelist = np.array(red_namelist)
+red_templist = np.array(red_templist)
+red_k_list = np.ones(len(red_namelist)) * 15000.0
+red_beta_list = 1/(kB * red_templist)
+red_TH_ik = [x for x in new_th if x != []]
+red_UO_ik = [x for x in new_uo if x != []]
+
+N_k = [ len(red_UO_i) for red_UO_i in red_UO_ik ]
+N_k = np.array(N_k)
+u_mbar = np.zeros((len(red_UO_ik), sum(N_k)))
+K = u_mbar.shape[0]
+N = u_mbar.shape[1]
+N_sims = len(red_templist)
+
+# make numpy arrays from data
+N_max = max(N_k)
+th_ik = np.zeros([K, N_max])
+uo_ik = np.zeros([K, N_max])
+k = 0
+for line1, line2 in zip(red_TH_ik, red_UO_ik):
+    th_ik[k,0:len(line1)] = np.array(line1)
+    uo_ik[k,0:len(line2)] = np.array(line2)
+    k = k + 1
+
+# go row by row to evaluate configuration energy at each temperature
+for k in range(K):
+    # populate off-diagonal blocks in MBAR array; go column by column, i.e. config by config
+    for i in range(N_k[k]):
+        dtheta = th_ik[k, i] - red_namelist
+        print k, i
+        u_mbar[ :, sum(N_k[:k]) + i ] = red_beta_list * ( uo_ik[k,i] + 0.5 * red_k_list * np.square(dtheta) )
+
+##### reduced theta range code ends here
+
 my_mbar = pymbar.MBAR(u_mbar, N_k)
 
 u_kn = np.zeros([K, N_max])
@@ -125,7 +176,7 @@ target_beta = 1/(kB*target_temp)
 for k in range(K):
     u_kn[k] = target_beta * uo_ik[k]
 u_n = np.reshape(u_kn, N_sims*N_max)
-theta_n = [val for row in theta_ik for val in row]
+theta_n = [val for row in red_TH_ik for val in row]
 theta_n = np.array(theta_n)
 
 # two dimensional binning -- for some reason this binning works better probably because 
