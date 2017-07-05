@@ -118,12 +118,14 @@ for k in range(0,K):
 indices = np.where(mask_kn)
 max_bins = 100
 nbins = 0
-delta = (theta_n.max() - theta_n.min()) / float(max_bins)
+min_val = -0.77
+max_val = -0.55
+delta = (max_val - min_val) / float(max_bins)
 bin_kn = np.zeros([K,N_max], np.int16)
 bin_centers = list()
 bin_counts = list()
 for i in range(max_bins):
-    val = theta_n.min() + delta * (i + 0.5)
+    val = min_val + delta * (i + 0.5)
     # Determine which configurations lie in this bin.
     in_bin = (val-delta/2 <= th_ik[indices]) & (th_ik[indices] < val+delta/2) 
   
