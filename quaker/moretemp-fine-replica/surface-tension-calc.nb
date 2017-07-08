@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     57272,       1611]
-NotebookOptionsPosition[     48167,       1364]
-NotebookOutlinePosition[     48503,       1379]
-CellTagsIndexPosition[     48460,       1376]
+NotebookDataLength[     56559,       1595]
+NotebookOptionsPosition[     47495,       1349]
+NotebookOutlinePosition[     47831,       1364]
+CellTagsIndexPosition[     47788,       1361]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1345,22 +1345,7 @@ Cell[BoxData["0.18999999999999995`"], "Print",
 Cell[BoxData["3.0562433977542033`*^-19"], "Print",
  CellChangeTimes->{{3.70846703296085*^9, 3.708467045365835*^9}}]
 }, Open  ]]
-}, Open  ]],
-
-Cell[BoxData[
- RowBox[{"NIntegrate", "[", 
-  RowBox[{
-   RowBox[{"i2", "/.", 
-    RowBox[{"\[Theta]", "\[Rule]", " ", 
-     RowBox[{"-", "0.72"}]}]}], " ", ",", 
-   RowBox[{"{", 
-    RowBox[{"f", ",", " ", "0", ",", " ", "1"}], "}"}]}], "]"}]], "Input",
- CellChangeTimes->{{3.708443403585896*^9, 3.7084434194275208`*^9}, {
-   3.708454012545001*^9, 3.7084540141853857`*^9}, {3.708461467186665*^9, 
-   3.7084614678823442`*^9}, 3.7084617276129093`*^9, 3.7084617849152327`*^9, {
-   3.708461944558893*^9, 3.708461974103038*^9}, {3.708462010119667*^9, 
-   3.708462011783659*^9}, {3.708462693171658*^9, 3.708462704434762*^9}, {
-   3.708462777338915*^9, 3.708462790179166*^9}}]
+}, Open  ]]
 },
 WindowSize->{1215, 1000},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
@@ -1611,8 +1596,7 @@ Cell[47118, 1338, 115, 1, 25, "Print"],
 Cell[47236, 1341, 113, 1, 23, "Print"],
 Cell[47352, 1344, 115, 1, 25, "Print"]
 }, Open  ]]
-}, Open  ]],
-Cell[47494, 1349, 669, 13, 32, "Input"]
+}, Open  ]]
 }
 ]
 *)
