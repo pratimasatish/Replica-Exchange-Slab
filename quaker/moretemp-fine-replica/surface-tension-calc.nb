@@ -1,0 +1,2317 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     91530,       2308]
+NotebookOptionsPosition[     90213,       2259]
+NotebookOutlinePosition[     90549,       2274]
+CellTagsIndexPosition[     90506,       2271]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$Assumptions", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"f", ">=", "0"}], "&&", 
+     RowBox[{"f", "<=", "1"}]}], "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.708461214406199*^9, 3.708461256385807*^9}, {
+  3.708461479074489*^9, 3.7084614818746567`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"p1", "[", 
+    RowBox[{"\[Theta]_", ",", "n_"}], "]"}], "=", 
+   FractionBox[
+    RowBox[{"Exp", "[", 
+     RowBox[{
+      RowBox[{"-", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"\[Theta]", "-", "a"}], ")"}], "2"]}], "/", 
+      RowBox[{"(", 
+       RowBox[{"2", 
+        RowBox[{"v1", "/", "n"}]}], ")"}]}], "]"}], 
+    RowBox[{"\[Sqrt]", 
+     RowBox[{"(", 
+      RowBox[{"2", "\[Pi]", " ", 
+       FractionBox["v1", "n"]}], ")"}]}]]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7084423467711687`*^9, 3.7084425032307177`*^9}, {
+  3.70844262856714*^9, 3.7084426317354183`*^9}, {3.708460943047237*^9, 
+  3.708460967023381*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"p2", "[", 
+    RowBox[{"\[Theta]_", ",", "n_"}], "]"}], "=", 
+   FractionBox[
+    RowBox[{"Exp", "[", 
+     RowBox[{
+      RowBox[{"-", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"\[Theta]", "-", "b"}], ")"}], "2"]}], "/", 
+      RowBox[{"(", 
+       RowBox[{"2", 
+        RowBox[{"v2", "/", "n"}]}], ")"}]}], "]"}], 
+    RowBox[{"\[Sqrt]", 
+     RowBox[{"(", 
+      RowBox[{"2", "\[Pi]", " ", 
+       FractionBox["v2", "n"]}], ")"}]}]]}], ";"}]], "Input",
+ CellChangeTimes->{{3.708442506811657*^9, 3.708442559406506*^9}, {
+  3.708442633983499*^9, 3.708442635287051*^9}, {3.708460972599597*^9, 
+  3.70846097650336*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"L", "[", "f_", "]"}], "=", 
+   RowBox[{"l1", "*", 
+    RowBox[{"Min", "[", 
+     RowBox[{
+      RowBox[{"\[Sqrt]", 
+       RowBox[{"(", 
+        RowBox[{"2", "\[Pi]", " ", "f"}], ")"}]}], ",", " ", "1"}], "]"}]}]}],
+   ";"}]], "Input",
+ CellChangeTimes->{{3.708443280076234*^9, 3.708443338131802*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"t1", "=", 
+  RowBox[{"p1", "[", 
+   RowBox[{
+    SubscriptBox["\[Theta]", "1"], ",", 
+    RowBox[{"f", "*", "N"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.708442594829122*^9, 3.708442610200844*^9}, {
+  3.708442643302607*^9, 3.708442654767206*^9}, {3.70844280864742*^9, 
+  3.708442809215605*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  SuperscriptBox["\[ExponentialE]", 
+   RowBox[{"-", 
+    FractionBox[
+     RowBox[{"f", " ", "N", " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"-", "a"}], "+", 
+         SubscriptBox["\[Theta]", "1"]}], ")"}], "2"]}], 
+     RowBox[{"2", " ", "v1"}]]}]], 
+  RowBox[{
+   SqrtBox[
+    RowBox[{"2", " ", "\[Pi]"}]], " ", 
+   SqrtBox[
+    FractionBox["v1", 
+     RowBox[{"f", " ", "N"}]]]}]]], "Output",
+ CellChangeTimes->{
+  3.70844261142382*^9, {3.7084426442919073`*^9, 3.708442656354084*^9}, 
+   3.708442810255599*^9, 3.708446227348057*^9, 3.708459945546928*^9, 
+   3.708460982250543*^9, 3.70846148618935*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"t2", "=", 
+  RowBox[{"p2", "[", 
+   RowBox[{
+    FractionBox[
+     RowBox[{"\[Theta]", "-", 
+      RowBox[{"f", "*", 
+       SubscriptBox["\[Theta]", "1"]}]}], 
+     RowBox[{"1", "-", "f"}]], ",", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "-", "f"}], ")"}], "*", "N"}]}], "]"}], " "}]], "Input",
+ CellChangeTimes->{{3.7084426576233253`*^9, 3.708442697518866*^9}, {
+  3.70844279869562*^9, 3.7084428134315233`*^9}, {3.708459909872469*^9, 
+  3.708459920567728*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  SuperscriptBox["\[ExponentialE]", 
+   RowBox[{"-", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", "f"}], ")"}], " ", "N", " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"-", "b"}], "+", 
+         FractionBox[
+          RowBox[{"\[Theta]", "-", 
+           RowBox[{"f", " ", 
+            SubscriptBox["\[Theta]", "1"]}]}], 
+          RowBox[{"1", "-", "f"}]]}], ")"}], "2"]}], 
+     RowBox[{"2", " ", "v2"}]]}]], 
+  RowBox[{
+   SqrtBox[
+    RowBox[{"2", " ", "\[Pi]"}]], " ", 
+   SqrtBox[
+    FractionBox["v2", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", "f"}], ")"}], " ", "N"}]]]}]]], "Output",
+ CellChangeTimes->{{3.7084427990587997`*^9, 3.708442813914152*^9}, 
+   3.708446227417468*^9, 3.708459947562901*^9, 3.708460984459827*^9, 
+   3.708461486261283*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"i1", "=", 
+  RowBox[{
+   RowBox[{"t1", "*", "t2"}], "/.", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"N", "\[Rule]", " ", "240"}], ",", 
+     RowBox[{"a", "\[Rule]", 
+      RowBox[{"-", "0.7218"}]}], " ", ",", 
+     RowBox[{"v1", "\[Rule]", "0.01359"}], " ", ",", 
+     RowBox[{"b", "\[Rule]", 
+      RowBox[{"-", "0.2844"}]}], " ", ",", 
+     RowBox[{"v2", "\[Rule]", "0.6769"}]}], " ", "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.708442865946128*^9, 3.708442867375826*^9}, {
+  3.708461069584523*^9, 3.708461092327903*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"398.2533044077858`", " ", 
+   SuperscriptBox["\[ExponentialE]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "8830.022075055189`"}], " ", "f", " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"0.7218`", "\[VeryThinSpace]", "+", 
+         SubscriptBox["\[Theta]", "1"]}], ")"}], "2"]}], "-", 
+     RowBox[{"177.27877086718865`", " ", 
+      RowBox[{"(", 
+       RowBox[{"1", "-", "f"}], ")"}], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"0.2844`", "\[VeryThinSpace]", "+", 
+         FractionBox[
+          RowBox[{"\[Theta]", "-", 
+           RowBox[{"f", " ", 
+            SubscriptBox["\[Theta]", "1"]}]}], 
+          RowBox[{"1", "-", "f"}]]}], ")"}], "2"]}]}]]}], 
+  RowBox[{
+   SqrtBox[
+    FractionBox["1", 
+     RowBox[{"1", "-", "f"}]]], " ", 
+   SqrtBox[
+    FractionBox["1", "f"]]}]]], "Output",
+ CellChangeTimes->{
+  3.708442867878296*^9, 3.708446227486837*^9, 3.708459949582323*^9, 
+   3.708460985741658*^9, {3.708461071610186*^9, 3.7084610928227463`*^9}, 
+   3.708461486333939*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"m1", "=", 
+  RowBox[{"Integrate", "[", 
+   RowBox[{"i1", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      SubscriptBox["\[Theta]", "1"], ",", 
+      RowBox[{"-", "Infinity"}], ",", "Infinity"}], "}"}]}], "]"}]}]], "Input",\
+
+ CellChangeTimes->{{3.708442816353765*^9, 3.708442846313807*^9}, {
+  3.7084433494197493`*^9, 3.70844334973193*^9}, {3.708446155076571*^9, 
+  3.708446156564361*^9}, {3.708459488942347*^9, 3.708459546653982*^9}, {
+  3.7084600441462317`*^9, 3.708460091673668*^9}, {3.708460990136384*^9, 
+  3.708461016096211*^9}, {3.708461098568122*^9, 3.7084610986604633`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ConditionalExpression", "[", 
+  RowBox[{
+   RowBox[{"398.2533044077858`", " ", 
+    SqrtBox[
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", "f"}], ")"}], " ", "f"}]], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "+", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}]}], ")"}]}], ",", 
+   RowBox[{"0", "<", "f", "<", "1.`"}]}], "]"}]], "Output",
+ CellChangeTimes->{
+  3.7084428638700933`*^9, 3.708442897986595*^9, 3.708443374658231*^9, 
+   3.7084462610903463`*^9, 3.708459997554717*^9, 3.7084610380629253`*^9, 
+   3.7084611189067793`*^9, {3.708461240685281*^9, 3.70846126203579*^9}, 
+   3.708461493480221*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FullSimplify", "[", "m1", "]"}]], "Input",
+ CellChangeTimes->{{3.7084461606167507`*^9, 3.708446164276123*^9}, {
+  3.70846114666444*^9, 3.708461154856399*^9}, {3.7084612091219883`*^9, 
+  3.708461209313457*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ConditionalExpression", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"1.`", " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        FractionBox[
+         RowBox[{
+          RowBox[{"-", "14.632680345539791`"}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "102.90211213459769`"}], "-", 
+             RowBox[{"180.91088631258387`", " ", "\[Theta]"}]}], ")"}], " ", 
+           "\[Theta]"}]}], 
+         RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "+", 
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "2.0204881578749`"}], "+", 
+             RowBox[{"1.`", " ", "f"}]}], ")"}]}]}]], "+", 
+        FractionBox[
+         RowBox[{"f", " ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "30.37670350213284`"}], "+", 
+            RowBox[{"34.61164643982465`", " ", 
+             SuperscriptBox["f", "2"]}], "+", 
+            RowBox[{"f", " ", 
+             RowBox[{"(", 
+              RowBox[{"10.397737407848581`", "\[VeryThinSpace]", "+", 
+               RowBox[{"158.26084334624832`", " ", "\[Theta]"}]}], ")"}]}], 
+            "+", 
+            RowBox[{"\[Theta]", " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "55.358731211650664`"}], "+", 
+               RowBox[{"180.91088631258387`", " ", "\[Theta]"}]}], ")"}]}]}], 
+           ")"}]}], 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "1.0204881578749`"}], "+", 
+            RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "7.588525787764529`"}], "+", 
+        RowBox[{"f", " ", 
+         RowBox[{"(", 
+          RowBox[{"15.177051575529058`", "\[VeryThinSpace]", "-", 
+           RowBox[{"7.588525787764529`", " ", "f"}], "-", 
+           RowBox[{"0.21275739084253872`", " ", "\[Theta]"}]}], ")"}]}], "+", 
+        
+        RowBox[{"0.21275739084253872`", " ", "\[Theta]"}]}], ")"}]}], ")"}], 
+    "/", 
+    RowBox[{"(", 
+     RowBox[{
+      SqrtBox[
+       RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+        RowBox[{"1.`", " ", "f"}]}]], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "1.`"}], "+", 
+        RowBox[{"1.`", " ", "f"}], "+", 
+        RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+     ")"}]}], ",", 
+   RowBox[{"0", "<", "f", "<", "1.`"}]}], "]"}]], "Output",
+ CellChangeTimes->{
+  3.7084462163545513`*^9, 3.708446761227785*^9, {3.708461134051244*^9, 
+   3.708461156381716*^9}, 3.708461273552142*^9, 3.7084615140126743`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"m1", "*", 
+   RowBox[{"L", "[", "f", "]"}]}], "/.", 
+  RowBox[{"{", 
+   RowBox[{"l1", "\[Rule]", "81"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.7084433928243637`*^9, 3.7084433972671432`*^9}, {
+  3.708461278977022*^9, 3.7084612852171803`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ConditionalExpression", "[", 
+  RowBox[{
+   RowBox[{"32258.517657030647`", " ", 
+    SqrtBox[
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", "f"}], ")"}], " ", "f"}]], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "+", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}]}], ")"}], " ", 
+    RowBox[{"Min", "[", 
+     RowBox[{"1", ",", 
+      RowBox[{
+       SqrtBox["f"], " ", 
+       SqrtBox[
+        RowBox[{"2", " ", "\[Pi]"}]]}]}], "]"}]}], ",", 
+   RowBox[{"0", "<", "f", "<", "1.`"}]}], "]"}]], "Output",
+ CellChangeTimes->{3.708443398404818*^9, 3.708446761359713*^9, 
+  3.708461285866002*^9, 3.70846151415973*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"NIntegrate", "[", 
+  RowBox[{
+   RowBox[{"398.2533044077858`", " ", 
+    SqrtBox[
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", "f"}], ")"}], " ", "f"}]], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "+", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}]}], ")"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"f", ",", " ", "0", ",", " ", "1"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.708443403585896*^9, 3.7084434194275208`*^9}, {
+   3.708454012545001*^9, 3.7084540141853857`*^9}, {3.708461467186665*^9, 
+   3.7084614678823442`*^9}, 3.7084617276129093`*^9, 3.7084617849152327`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"NIntegrate", "::", "inumr"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"The integrand \
+\[NoBreak]\\!\\(\\*RowBox[{\\\"398.2533044077858`\\\", \\\" \\\", \
+SqrtBox[RowBox[{RowBox[{\\\"(\\\", RowBox[{\\\"1\\\", \\\"-\\\", \\\"f\\\"}], \
+\\\")\\\"}], \\\" \\\", \\\"f\\\"}]], \\\" \\\", RowBox[{\\\"(\\\", \
+RowBox[{FractionBox[RowBox[{SuperscriptBox[\\\"\[ExponentialE]\\\", \
+RowBox[{FractionBox[\\\"14.33890264440833`\\\", RowBox[{\\\"Plus\\\", \\\"[\\\
+\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"2\\\", \\\"\[RightSkeleton]\\\"}], \
+\\\"]\\\"}]], \\\"+\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"14\\\", \\\"\
+\[RightSkeleton]\\\"}], \\\"+\\\", FractionBox[RowBox[{\\\"3.632115445395205`\
+\\\", \\\" \\\", \\\"f\\\", \\\" \\\", SuperscriptBox[\\\"\[Theta]\\\", \\\"2\
+\\\"]}], RowBox[{RowBox[{\\\"Plus\\\", \\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\
+\\\", \\\"2\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}], \\\" \\\", RowBox[{\
+\\\"Plus\\\", \\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"2\\\", \\\"\
+\[RightSkeleton]\\\"}], \\\"]\\\"}]}]]}]], \\\" \\\", RowBox[{\\\"(\\\", \
+RowBox[{RowBox[{\\\"-\\\", \\\"0.009527260293607466`\\\"}], \\\"-\\\", \
+RowBox[{\\\"0.009527260293607466`\\\", \\\" \\\", SuperscriptBox[\\\"f\\\", \
+\\\"2\\\"]}], \\\"+\\\", RowBox[{\\\"f\\\", \\\" \\\", RowBox[{\\\"(\\\", \
+RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\")\
+\\\"}]}], \\\"+\\\", RowBox[{RowBox[{\\\"\[LeftSkeleton]\\\", \\\"22\\\", \
+\\\"\[RightSkeleton]\\\"}], \\\" \\\", \\\"\[Theta]\\\"}], \\\"-\\\", \
+RowBox[{\\\"0.009527260293607466`\\\", \\\" \\\", RowBox[{\\\"(\\\", RowBox[{\
+\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\")\\\"}], \
+\\\" \\\", RowBox[{\\\"Erf\\\", \\\"[\\\", RowBox[{RowBox[{\\\"Times\\\", \
+\\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"3\\\", \\\"\[RightSkeleton]\\\
+\"}], \\\"]\\\"}], \\\"+\\\", RowBox[{\\\"Times\\\", \\\"[\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"4\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}], \
+\\\"+\\\", RowBox[{\\\"Times\\\", \\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \
+\\\"4\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]}], \\\"]\\\"}]}]}], \
+\\\")\\\"}]}], RowBox[{SqrtBox[RowBox[{\\\"f\\\", \\\" \\\", \
+RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"1.0204881578749`\\\", \\\"\
+\[VeryThinSpace]\\\"}], \\\"-\\\", RowBox[{\\\"2.0204881578749`\\\", \\\" \
+\\\", \\\"f\\\"}], \\\"+\\\", RowBox[{\\\"1.`\\\", \\\" \\\", \
+RowBox[{\\\"Power\\\", \\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"2\\\", \
+\\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]}]}], \\\")\\\"}]}]], \\\" \\\", \
+RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"-\\\", \\\"1.`\\\"}], \\\"+\\\", \
+RowBox[{\\\"1.`\\\", \\\" \\\", \\\"f\\\"}], \\\"+\\\", \
+RowBox[{\\\"0.028036722387579052`\\\", \\\" \\\", \\\"\[Theta]\\\"}]}], \\\")\
+\\\"}]}]], \\\"+\\\", \
+FractionBox[RowBox[{SuperscriptBox[\\\"\[ExponentialE]\\\", \
+RowBox[{FractionBox[RowBox[{\\\"\[LeftSkeleton]\\\", \\\"18\\\", \\\"\
+\[RightSkeleton]\\\"}], RowBox[{\\\"Plus\\\", \\\"[\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]], \
+\\\"+\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"14\\\", \
+\\\"\[RightSkeleton]\\\"}], \\\"+\\\", \
+FractionBox[RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \
+\\\"\[RightSkeleton]\\\"}], RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\
+\[RightSkeleton]\\\"}]]}]], \\\" \\\", RowBox[{\\\"(\\\", \
+RowBox[{RowBox[{\\\"\[LeftSkeleton]\\\", \\\"5\\\", \
+\\\"\[RightSkeleton]\\\"}], \\\"+\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\
+\\\", \\\"\[RightSkeleton]\\\"}]}], \\\")\\\"}]}], RowBox[{SqrtBox[RowBox[{\\\
+\"f\\\", \\\" \\\", RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"1.0204881578749`\\\
+\", \\\"\[VeryThinSpace]\\\"}], \\\"-\\\", \
+RowBox[{RowBox[{\\\"\[LeftSkeleton]\\\", \\\"16\\\", \
+\\\"\[RightSkeleton]\\\"}], \\\" \\\", \\\"f\\\"}], \\\"+\\\", \
+RowBox[{\\\"1.`\\\", \\\" \\\", RowBox[{\\\"Power\\\", \\\"[\\\", \
+RowBox[{\\\"\[LeftSkeleton]\\\", \\\"2\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\
+\\\"}]}]}], \\\")\\\"}]}]], \\\" \\\", RowBox[{\\\"(\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\")\\\"}]}]]}], \
+\\\")\\\"}]}]\\)\[NoBreak] has evaluated to non-numerical values for all \
+sampling points in the region with boundaries \
+\[NoBreak]\\!\\(\\*RowBox[{\\\"{\\\", RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \
+\\\",\\\", \\\"1\\\"}], \\\"}\\\"}], \\\"}\\\"}]\\)\[NoBreak]. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/NIntegrate/inumr\\\", \
+ButtonNote -> \\\"NIntegrate::inumr\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.7084614688367043`*^9, 3.708461514255735*^9, 
+  3.708461738223686*^9, 3.7084617861523333`*^9}],
+
+Cell[BoxData[
+ RowBox[{"NIntegrate", "[", 
+  RowBox[{
+   RowBox[{"398.2533044077858`", " ", 
+    SqrtBox[
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", "f"}], ")"}], " ", "f"}]], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "+", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}]}], ")"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"f", ",", "0", ",", "1"}], "}"}]}], "]"}]], "Output",
+ CellChangeTimes->{
+  3.7084461516382513`*^9, 3.7084486287216663`*^9, 3.708459209586503*^9, {
+   3.708461464976982*^9, 3.708461468936602*^9}, 3.7084615142585363`*^9, 
+   3.7084617382258*^9, 3.708461786172675*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["m1"], "Input",
+ CellChangeTimes->{{3.708461662996228*^9, 3.708461667515856*^9}, {
+  3.7084617479328623`*^9, 3.708461768684534*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ConditionalExpression", "[", 
+  RowBox[{
+   RowBox[{"398.2533044077858`", " ", 
+    SqrtBox[
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", "f"}], ")"}], " ", "f"}]], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           FractionBox["14.33890264440833`", 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4571.721664909859`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"4586.060567554267`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", "f"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "-", 
+           FractionBox[
+            RowBox[{"9241.344427988184`", " ", 
+             SuperscriptBox["f", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"4620.672213994092`", " ", 
+             SuperscriptBox["f", "3"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"100.8361648692569`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "-", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", "f", " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"259.09700821550524`", " ", 
+             SuperscriptBox["f", "2"], " ", "\[Theta]"}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]], "+", 
+           FractionBox[
+            RowBox[{"177.27877086718865`", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"-", "1.`"}], "+", "f"}]], "+", 
+           FractionBox[
+            RowBox[{"3.632115445395205`", " ", "f", " ", 
+             SuperscriptBox["\[Theta]", "2"]}], 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.`"}], "+", "f"}], ")"}], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "1.0204881578749`"}], "+", 
+               RowBox[{"1.`", " ", "f"}]}], ")"}]}]]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "0.009527260293607466`"}], "-", 
+           RowBox[{"0.009527260293607466`", " ", 
+            SuperscriptBox["f", "2"]}], "+", 
+           RowBox[{"f", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.01905452058721493`", "\[VeryThinSpace]", "-", 
+              RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.0002671131519660774`", " ", "\[Theta]"}], "+", 
+           RowBox[{"0.009527260293607466`", " ", 
+            RowBox[{"(", 
+             RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               SuperscriptBox["f", "2"]}], "+", 
+              RowBox[{"f", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", "2.`"}], "+", 
+                 RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], 
+                ")"}]}], "-", 
+              RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}], 
+            " ", 
+            RowBox[{"Erf", "[", 
+             RowBox[{
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"67.9755265812196`", " ", "f", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]]}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]], "-", 
+              FractionBox[
+               RowBox[{"1.9058109679071544`", " ", 
+                SqrtBox[
+                 RowBox[{"f", " ", 
+                  RowBox[{"(", 
+                   RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                    RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                    RowBox[{"1.`", " ", 
+                    SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", "\[Theta]"}], 
+               RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+                RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+                RowBox[{"1.`", " ", 
+                 SuperscriptBox["f", "2"]}]}]]}], "]"}]}]}], ")"}]}], ")"}], 
+       "/", 
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"f", " ", 
+           RowBox[{"(", 
+            RowBox[{"1.0204881578749`", "\[VeryThinSpace]", "-", 
+             RowBox[{"2.0204881578749`", " ", "f"}], "+", 
+             RowBox[{"1.`", " ", 
+              SuperscriptBox["f", "2"]}]}], ")"}]}]], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1.`"}], "+", 
+           RowBox[{"1.`", " ", "f"}], "+", 
+           RowBox[{"0.028036722387579052`", " ", "\[Theta]"}]}], ")"}]}], 
+        ")"}]}]}], ")"}]}], ",", 
+   RowBox[{"0", "<", "f", "<", "1.`"}]}], "]"}]], "Output",
+ CellChangeTimes->{
+  3.7084616597479343`*^9, 3.70846172515662*^9, {3.708461765247154*^9, 
+   3.708461769119967*^9}}]
+}, Open  ]]
+},
+WindowSize->{1215, 1000},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+FrontEndVersion->"10.3 for Linux x86 (64-bit) (October 9, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 299, 8, 32, "Input"],
+Cell[860, 30, 692, 21, 76, "Input"],
+Cell[1555, 53, 686, 21, 76, "Input"],
+Cell[2244, 76, 348, 11, 35, "Input"],
+Cell[CellGroupData[{
+Cell[2617, 91, 322, 8, 32, "Input"],
+Cell[2942, 101, 674, 21, 97, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3653, 127, 496, 14, 56, "Input"],
+Cell[4152, 143, 871, 28, 106, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5060, 176, 548, 14, 32, "Input"],
+Cell[5611, 192, 1072, 31, 93, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6720, 228, 602, 13, 32, "Input"],
+Cell[7325, 243, 14939, 365, 664, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22301, 613, 233, 4, 32, "Input"],
+Cell[22537, 619, 2763, 74, 134, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25337, 698, 279, 7, 32, "Input"],
+Cell[25619, 707, 14948, 368, 664, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[40604, 1080, 14916, 364, 1041, "Input"],
+Cell[55523, 1446, 4793, 71, 277, "Message"],
+Cell[60319, 1519, 14900, 365, 697, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[75256, 1889, 145, 2, 32, "Input"],
+Cell[75404, 1893, 14793, 363, 664, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

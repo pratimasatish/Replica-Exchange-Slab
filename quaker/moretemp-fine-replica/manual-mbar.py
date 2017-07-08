@@ -91,10 +91,10 @@ for k in range(0,K):
    mask_kn[k,0:N_k[k]] = True
 # Create a list from this mask.
 indices = np.where(mask_kn)
-max_bins = 100
+max_bins = 50
 nbins = 0
-min_val = -0.77
-max_val = -0.55
+min_val = -0.5
+max_val = -0.1
 delta = (max_val - min_val) / float(max_bins)
 bin_kn = np.zeros([K,N_max], np.int16)
 bin_centers = list()
