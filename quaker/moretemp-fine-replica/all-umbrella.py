@@ -194,7 +194,7 @@ popt, pcov = curve_fit(gauss, x_ord, y_ord)
 fit_ord = gauss(x_ord, popt[0], popt[1], popt[2])
 print popt[0], popt[1], popt[2]
 
-disord_spring = np.where((thz >= -0.43) * (thz <=-0.15))
+disord_spring = np.where((thz >= -0.28) * (thz <=0.15))
 x_disord = thz[disord_spring]
 y_disord = prob_i[disord_spring]
 popt, pcov = curve_fit(gauss, x_disord, y_disord)

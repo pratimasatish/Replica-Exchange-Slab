@@ -39,18 +39,21 @@ data = np.genfromtxt('theta-' + args.temp + '.' + bias + '.txt', delimiter=' ')
 size = len(data)
 
 N = 240
-T = size/N
+T = 2000
 X = 20
 Z = 12
 
+data_end = data[size - T*N:]
+# print size, len(data_end), len(data_end)/N
 data_all_txz = np.zeros((T, X, Z))
 for t in xrange(T):
     time_off = t * N
     for col in xrange(10):
         off = time_off + col * 12
-        data_all_txz[t, 2*col + 0, :] = data[off +   0 : off +       Z ]
-        data_all_txz[t, 2*col + 1, :] = data[off + N/2 : off + N/2 + Z ]
+        data_all_txz[t, 2*col + 0, :] = data_end[off +   0 : off +       Z ]
+        data_all_txz[t, 2*col + 1, :] = data_end[off + N/2 : off + N/2 + Z ]
 
+# print data_all_txz.shape
 # func_txz  = np.cos(data_all_txz)
 if args.func is None:
     func_txz = data_all_txz
