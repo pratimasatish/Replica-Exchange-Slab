@@ -30,8 +30,8 @@ def surf_term(f, gamma):
 def integrand(f, args):
     x, gamma = args
     num = -N * ( -a1 * f + a2 * (f - 1) + x )**2 / ( 2 * (f * (v1 - v2) + v2) )
-    denom = 2 * np.pi * np.sqrt(v2 / N) * np.sqrt( v1 / (f*N - f*f*N) )
-    denom = denom * np.sqrt( (f*f*N*v1 - f*f*N*v2 + f*N*v2) / (2*np.pi*v1*v2 - 2*np.pi*f*v1*v2) )
+    denom = 2 * np.pi * np.sqrt(v2 / N) * np.sqrt( v1 / (f*N - N * f**2) )
+    denom = denom * np.sqrt( ( (N * v1 - N * v2) * f**2 + f*N*v2 ) / ( 2 * np.pi * v1 * v2 * (1-f) ) )
     return (np.exp(num) * surf_term(f, gamma)) / denom 
 
 #     exp_num = 34.6116*f*f*f + (158.261*x+10.3966)*f*f + f*(180.911*x*x - 55.3587*x - 30.3767) - 180.911*x*x - 102.902*x - 14.6327
