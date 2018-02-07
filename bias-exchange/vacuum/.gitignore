@@ -1,0 +1,6 @@
+dump.*
+stripped.*
+sparse.*
+*.txt
+log.*
+*.png
