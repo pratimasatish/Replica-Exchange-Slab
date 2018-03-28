@@ -262,6 +262,9 @@ shifted_u = E_bin - np.mean(E_bin)
 simple_f_new = f_i + (beta_transition - beta) * shifted_u
 simple_f_new = simple_f_new - np.min(simple_f_new)
 
+for i in range(len(new_bins)):
+    print '{} {} {}'.format(new_bins[i], f_new[i], simple_f_new[i])
+
 prob_new = np.exp(-f_new)
 simple_prob_new = np.exp(-simple_f_new)
 plt.figure()

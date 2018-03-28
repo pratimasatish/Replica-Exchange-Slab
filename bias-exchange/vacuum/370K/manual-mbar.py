@@ -166,8 +166,8 @@ plt.show()
 # plot E as a function of theta_z bins
 th_flattened = th_ik.reshape(-1)
 uo_flattened = uo_ik.reshape(-1)
-E_bin, edges, y = sp.stats.binned_statistic(th_flattened, uo_flattened, statistic='median', bins=theta_axis)
-new_bins = 0.5 * (theta_axis[1:] + theta_axis[:-1])
+E_bin, edges, y = sp.stats.binned_statistic(th_flattened, uo_flattened, statistic='median', bins=100)
+new_bins = 0.5 * (edges[1:] + edges[:-1])
 # print 'E_bin shape = {}'.format(E_bin.shape)
 # print 'theta_axis shape = {}'.format(theta_axis.shape)
 plt.plot(new_bins, E_bin, 'r', linewidth=5, alpha=0.4)
@@ -270,15 +270,27 @@ u_n = np.reshape(u_kn, N)
 
 [f_new, df_new] = my_mbar.computePMF(u_kn, bin_kn, nbins)
 
+# also calculate a simple estimate of free energy at a new temperature
+# compare to MBAR results
+shifted_u = E_bin - np.mean(E_bin)
+simple_f_new = f_i + (beta_transition - beta) * shifted_u
+simple_f_new = simple_f_new - np.min(simple_f_new)
+
+for i in range(len(new_bins)):
+    print '{} {} {}'.format(new_bins[i], f_new[i], simple_f_new[i])
+
 prob_new = np.exp(-f_new)
+simple_prob_new = np.exp(-simple_f_new)
 plt.figure()
-plt.plot(theta_axis, f_new, color='#006d2c', marker='o')
+plt.plot(theta_axis, f_new, color='#006d2c', marker='o', label='MBAR predicted free energy')
 plt.fill_between(theta_axis, f_new - 2*df_new, f_new+2*df_new, color="#006d2c", alpha=0.4)
+plt.plot(new_bins, simple_f_new, 'rv', markersize=8, label='simple free energy estimate')
 plt.xlim(-1.0, 0.0)
-# plt.ylim(-0.2, 20)
+plt.ylim(-2, 25)
 plt.xlabel(r'$\theta$', fontsize=28)
 plt.ylabel(r'$F_{\textrm{target}}(\theta)$', fontsize=28)
-plt.title('$free energy at {} K$'.format(temp_transition), fontsize=32)
+plt.title('free energy at {}$'.format(temp_transition), fontsize=32)
+plt.legend(loc='best', fontsize=22)
 plt.show()
 
 # compute probability area of different phases at target temperature = original temperature
@@ -287,12 +299,20 @@ disord_indices = np.where(theta_axis > -0.575)
 
 area_ord = integrate.simps(prob_new[ord_indices], theta_axis[ord_indices])
 area_disord = integrate.simps(prob_new[disord_indices], theta_axis[disord_indices])
+
+simple_area_ord = integrate.simps(simple_prob_new[ord_indices], theta_axis[ord_indices])
+simple_area_disord = integrate.simps(simple_prob_new[disord_indices], theta_axis[disord_indices])
+
 print area_ord, area_disord
+print simple_area_ord, simple_area_disord
 
 plt.figure()
-plt.plot(theta_axis, prob_new, color='#006d2c', marker='o')
+plt.plot(theta_axis, prob_new, color='#006d2c', marker='o', label='MBAR predicted free energy')
+plt.plot(new_bins, simple_prob_new, 'rv', label='simple free energy estimate')
 plt.xlabel(r'$\theta_z$', fontsize=28)
 plt.ylabel(r'$P(\theta_z)$', fontsize=28)
+plt.legend(loc='best', fontsize=22)
 plt.show()
+
 
 

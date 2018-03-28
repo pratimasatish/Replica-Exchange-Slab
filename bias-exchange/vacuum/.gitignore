@@ -1,3 +1,5 @@
+*.tga
+log.*
 pot*
 bias*
 dump.*
