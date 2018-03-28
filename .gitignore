@@ -1,3 +1,5 @@
+*.tga
+restart*
 lig.*
 theta*
 *.txt
