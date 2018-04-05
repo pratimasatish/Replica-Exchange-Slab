@@ -259,12 +259,13 @@ plt.ylabel(r'$P(\theta_z)$', fontsize=28)
 plt.show()
 
 # reweight free energy to new target temperature
-# target_temp = 372
-# target_beta = 1/(kB * target_temp)
+target_temp = 372.5
+target_beta = 1/(kB * target_temp)
 u_kn = []
 # populate diagonal blocks in MBAR array
 for i in range(K):
-    u_kn.append(UO_ik[i] * beta_transition)
+#     u_kn.append(UO_ik[i] * beta_transition)
+    u_kn.append(UO_ik[i] * target_beta)
 u_kn = np.array(u_kn)
 u_n = np.reshape(u_kn, N)
 
@@ -273,7 +274,8 @@ u_n = np.reshape(u_kn, N)
 # also calculate a simple estimate of free energy at a new temperature
 # compare to MBAR results
 shifted_u = E_bin - np.mean(E_bin)
-simple_f_new = f_i + (beta_transition - beta) * shifted_u
+# simple_f_new = f_i + (beta_transition - beta) * shifted_u
+simple_f_new = f_i + (target_beta - beta) * shifted_u
 simple_f_new = simple_f_new - np.min(simple_f_new)
 
 for i in range(len(new_bins)):
@@ -289,7 +291,8 @@ plt.xlim(-1.0, 0.0)
 plt.ylim(-2, 25)
 plt.xlabel(r'$\theta$', fontsize=28)
 plt.ylabel(r'$F_{\textrm{target}}(\theta)$', fontsize=28)
-plt.title('free energy at {}$'.format(temp_transition), fontsize=32)
+# plt.title('free energy at {}$'.format(temp_transition), fontsize=32)
+plt.title('free energy at {}$'.format(target_temp), fontsize=32)
 plt.legend(loc='best', fontsize=22)
 plt.show()
 
