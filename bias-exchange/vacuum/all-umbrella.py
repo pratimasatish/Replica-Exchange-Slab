@@ -20,12 +20,13 @@ namelist_350 = np.array( [-0.750, -0.700, -0.675, -0.625, -0.600, -0.550, -0.500
 namelist_365 = np.array( [-0.750, -0.700, -0.675, -0.625, -0.600, -0.550, -0.500, -0.450, -0.425, -0.400, -0.375, -0.350, -0.275, -0.225, -0.175, -0.125] )
 namelist_370 = np.array( [-0.750, -0.700, -0.650, -0.625, -0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.425, -0.350, -0.275, -0.225, -0.175, -0.125] )
 namelist_375 = np.array( [-0.750, -0.700, -0.650, -0.625, -0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.425, -0.350, -0.275, -0.225, -0.175, -0.125] )
+namelist_380 = np.array( [-0.750, -0.700, -0.650, -0.625, -0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.425, -0.350, -0.275, -0.225, -0.175, -0.125] )
 
-full_namelist = np.concatenate(( namelist_350, namelist_365, namelist_370, namelist_375 ))
+full_namelist = np.concatenate(( namelist_350, namelist_365, namelist_370, namelist_375, namelist_380 ))
 T_bias = 5000
 N_bias = len(namelist_370)
 
-temp_list = np.concatenate(( np.ones(N_bias) * 350.0, np.ones(N_bias) * 365.0, np.ones(N_bias) * 370.0, np.ones(N_bias) * 375.0 ))
+temp_list = np.concatenate(( np.ones(N_bias) * 350.0, np.ones(N_bias) * 365.0, np.ones(N_bias) * 370.0, np.ones(N_bias) * 375.0, np.ones(N_bias) * 380.0 ))
 beta_list = 1/(kB * temp_list)
 k_list = np.ones(len(full_namelist)) * 1500.0
 
@@ -67,6 +68,12 @@ for biasval in namelist_375:
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i )
 
+for biasval in namelist_380:
+    data = np.genfromtxt('380K/theta{:1.3f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
 # build up potential matrix
 
 for k, th in enumerate(namelist_350):
@@ -89,6 +96,12 @@ for k, th in enumerate(namelist_370):
 
 for k, th in enumerate(namelist_375):
     lines = np.genfromtxt("375K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[5001:] )
+    dtheta_i = np.array(theta_ik[k + 3*N_bias]) - th
+    UO_ik.append( lines[5001:] - 0.5 * k_list[k + 3*N_bias] * np.square(dtheta_i) )
+
+for k, th in enumerate(namelist_380):
+    lines = np.genfromtxt("380K/pot-new.{:1.3f}".format(th))
     VO_ik.append( lines[5001:] )
     dtheta_i = np.array(theta_ik[k + 3*N_bias]) - th
     UO_ik.append( lines[5001:] - 0.5 * k_list[k + 3*N_bias] * np.square(dtheta_i) )
@@ -161,7 +174,7 @@ for i in range(max_bins):
         # increment number of bins
         nbins += 1
 
-target_temp = 372.2
+target_temp = 372.0
 target_beta = 1/(kB*target_temp)
 u_kn = np.zeros([K, N_max])
 # populate diagonal blocks in MBAR array
@@ -188,7 +201,7 @@ plt.show()
 th_flattened = th_ik.reshape(-1)
 uo_flattened = uo_ik.reshape(-1)
 E_bin, edges, y = sp.stats.binned_statistic(th_flattened, uo_flattened, statistic='median', bins=100)
-# new_bins = 0.5 * (edges[1:] + edges[:-1])
+new_bins = 0.5 * (edges[1:] + edges[:-1])
 # plt.plot(new_bins, E_bin, 'r', linewidth=5, alpha=0.4)
 # plt.plot(new_bins, E_bin, 'ro', markersize=9, label='binned energies from all replicas')
 # plt.xlabel(r'$\theta_z$', fontsize=28)
