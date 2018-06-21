@@ -179,8 +179,8 @@ plt.legend(loc='best', fontsize=28)
 plt.show()
 
 # print "free energies\n" 
-# for j in range(nbins):
-#     print theta_axis[j], f_i[j]
+for j in range(nbins):
+    print theta_axis[j], f_i[j]
 
 # code to get an estimate of transition temeprature based on current dF and dE values
 # dF already in units of beta*F
@@ -232,6 +232,7 @@ plt.show()
 new_uo = np.zeros((K, nbins))
 for k in range(K):
     new_uo[k, :] = 0.5 * k_list[k] * (bin_centers - namelist[k])**2
+#     new_uo[k, :] = 0.5 * 5000 * (bin_centers - namelist[k])**2
 
 color_list=iter(plt.cm.rainbow(np.linspace(0,1,K)))
 for index in range(K):
@@ -239,6 +240,7 @@ for index in range(K):
     plt.hist(th_ik[index, :], bins=bin_centers, normed=True, label=r'$\theta = {}$'.format(namelist[index]), histtype='stepfilled', alpha=0.5, color=c)
 #     plt.hist(th_ik[index, :], bins=bin_centers, label=r'$\theta = {}$'.format(namelist[index]), histtype='stepfilled', alpha=0.5)
     plt.plot(bin_centers, (np.sqrt(beta * k_list[k])) * np.exp(-beta * new_uo[index, :]), linewidth=3, color=c)
+#     plt.plot(bin_centers, (np.sqrt(beta * 5000)) * np.exp(-beta * new_uo[index, :]), linewidth=3, color=c)
 plt.xlabel(r'$\theta$', fontsize=28)
 plt.ylabel(r'$P(\theta)$', fontsize=28)
 plt.legend(loc='best', fontsize=20)

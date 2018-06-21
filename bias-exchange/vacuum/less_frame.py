@@ -11,7 +11,7 @@ n_atoms = 10320
 n_lines = n_atoms + 2
 
 # with open("dump.new." + args.bias + ".xyz") as f:
-with open("dump-" + args.bias + "-365.xyz") as f:
+with open("dump-" + args.bias + "-400.xyz") as f:
     for n, l in enumerate(f):
         if (n//n_lines) % args.step == 0:
             print l,
