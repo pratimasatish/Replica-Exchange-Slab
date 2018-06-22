@@ -42,6 +42,14 @@ name_arr = [ [2,4], [3,9], [5,7], [14,1], [10,6], [18,11] ]
 name_arr = np.array(name_arr)
 time_arr = np.arange(T)
 
+name_arr = np.zeros((theta_lat.shape[1]*theta_lat.shape[2], 2))
+count = 0
+for i in range(theta_lat.shape[1]):
+    for j in range(theta_lat.shape[2]):
+        name_arr[count][0] = i
+        name_arr[count][1] = j
+        count = count + 1
+
 color=iter(plt.cm.rainbow(np.linspace(0,1,name_arr.shape[0])))
 for i in name_arr:
     c = next(color)
