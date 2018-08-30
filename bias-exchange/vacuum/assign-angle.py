@@ -34,15 +34,15 @@ for i in range(T):
     theta_lat.append( ligdata[i, :, :].flatten() )
 theta_lat = np.array(theta_lat)
 theta_lat = theta_lat.reshape((-1, 20, 12))
-print theta_lat.shape
+# print theta_lat.shape
 
 # plt.clf();plt.hist(theta_lat[:,:].flatten(), bins=100, normed=True);plt.show()
-print theta_lat[:,:].flatten().var()
+# print theta_lat[:,:].flatten().var()
 
 theta_mean = np.mean(theta_lat, axis=0)
-print theta_mean.shape
-print 'x-mean', np.mean(theta_mean, axis=0)
-print 'z-mean', np.mean(theta_mean, axis=1)
+# print theta_mean.shape
+# print 'x-mean', np.mean(theta_mean, axis=0)
+# print 'z-mean', np.mean(theta_mean, axis=1)
 plt.imshow(theta_mean, aspect=0.6, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.4, vmax=-0.1)
 # plt.imshow(theta_mean, aspect=0.6, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.8, vmax=-0.1)
 plt.xticks(np.arange(0, 12, 1))
@@ -117,7 +117,7 @@ for sample in xrange(samplez):
 all_corr_xz = np.array(all_corr_xz)
 m_corr_xz = np.mean(all_corr_xz, axis=0)
 d_corr_xz = np.std (all_corr_xz, axis=0) / np.sqrt(samplez)
-print np.mean(np.array(var_list))
+# print np.mean(np.array(var_list))
 # print m_corr_xz[1:,0].shape, range(1,X/2)
  
 # correlation plots with first data point removed
@@ -207,7 +207,7 @@ else:
     cg_mean = np.mean(cg_theta, axis=1)
 
 # cg_mean = np.transpose(cg_mean)
-print cg_theta.shape
+# print cg_theta.shape
 
 if args.savefigs:
     name_arr = range(0, t_steps, 10)
@@ -238,7 +238,7 @@ plt.hist(cg_theta[:,:,:].flatten(), bins=bins, normed=True, histtype='stepfilled
 plt.plot(bins, np.exp(-beta * (bins - th_av)**2 / (2 * th_std * th_std) ) / np.sqrt(2 * np.pi * th_std *th_std), linewidth=3, color='b')
 plt.show()
 
-print np.mean(np.mean(cg_mean, axis=1), axis=0)
+# print np.mean(np.mean(cg_mean, axis=1), axis=0)
 # plt.imshow(cg_mean, aspect=0.6, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.8, vmax=-0.1)
 plt.imshow(cg_mean, aspect=0.6, cmap="PRGn_r", origin="lower", interpolation="none", vmin=-0.8, vmax=-0.1)
 plt.xticks(np.arange(0, 12, 1))
@@ -256,10 +256,10 @@ X = cg_mean.shape[0]
 Z = cg_mean.shape[1]
 
 mean = np.mean(cg_theta[:,:,:], axis=(0,1,2))
-print cg_theta.shape
+# print cg_theta.shape
 # cg_theta = cg_theta[::10, :, :]
 cg_theta[:, :, :] -= mean
-print cg_theta.shape
+# print cg_theta.shape
 
 # print theta_lat[:,:].flatten().var()
 # exit(1)
@@ -297,14 +297,16 @@ for sample in xrange(samplez):
     all_corr_xz.append(corr_xz)
 #     ax.plot_surface(xv, zv, corr_xz.T)
 
-print corr_xz
-print dist_xz 
+# print dist_xz 
 all_corr_xz = np.array(all_corr_xz)
 m_corr_xz = np.mean(all_corr_xz, axis=0)
 d_corr_xz = np.std (all_corr_xz, axis=0) / np.sqrt(samplez)
-print m_corr_xz[1:,0].shape, range(1,X/2)
+# print m_corr_xz[1:,0].shape, range(1,X/2)
 ax.plot_surface(xv, zv, m_corr_xz.T)
 plt.show()
+for i in range(X/2):
+    for j in range(Z/2):
+        print i, j, m_corr_xz[i,j], d_corr_xz[i,j]
 
 dist_r = np.unique(dist_xz)
 corr_r = np.zeros(len(dist_r))
@@ -345,8 +347,8 @@ plt.show()
 #     pnt = pnt + "\n"
 # print pnt
 
-print np.mean(cg_mean)
-print np.std(cg_mean)
+# print np.mean(cg_mean)
+# print np.std(cg_mean)
 
 # bins = np.linspace(-0.9, -0.5, 200)
 # cg_hist, bins = np.histogram(cg_mean, bins=bins)

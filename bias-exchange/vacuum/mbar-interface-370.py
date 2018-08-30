@@ -20,6 +20,8 @@ namelist_370 = np.array( [-0.750, -0.700, -0.650, -0.625, -0.600, -0.580, -0.560
 namelist_375 = np.array( [-0.750, -0.700, -0.650, -0.625, -0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.425, -0.350, -0.275, -0.225, -0.175, -0.125] )
 namelist_370int = np.array( [-0.750, -0.700, -0.690, -0.680, -0.670, -0.660, -0.650, -0.640, -0.630, -0.620, -0.610, -0.600, -0.575, -0.550] )
 namelist_370mid = np.array( [-0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.480, -0.460, -0.440, -0.420, -0.400, -0.380, -0.360, -0.340] )
+namelist_370last = np.array( [-0.370, -0.350, -0.330, -0.310, -0.290, -0.270, -0.250, -0.230, -0.210, -0.190, -0.170, -0.150, -0.130, -0.110] )
+namelist_370super = np.array( [-0.140, -0.120, -0.100, -0.080, -0.060, -0.040, -0.020, 0.000, 0.020, 0.040, 0.060, 0.080, 0.100, 0.120] )
 namelist_375int = np.array( [-0.750, -0.700, -0.690, -0.680, -0.670, -0.660, -0.650, -0.640, -0.630, -0.620, -0.610, -0.600, -0.575, -0.550] )
 T_bias = 5000
 N_bias = len(namelist_370)
@@ -39,11 +41,12 @@ N_int = len(namelist_370int)
 
 # full_namelist = np.concatenate(( namelist_370int, namelist_370mid, namelist_375int ))
 # temp_list = np.concatenate(( np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 375.0  ))
-full_namelist = np.concatenate(( namelist_370int, namelist_370mid ))
-temp_list = np.concatenate(( np.ones(N_int) * 370.0, np.ones(N_int) * 370.0  ))
+full_namelist = np.concatenate(( namelist_370int, namelist_370mid, namelist_370last, namelist_370super ))
+temp_list = np.concatenate(( np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 370.0 ))
 
+temp_sim = 370
 beta_list = 1/(kB * temp_list)
-k_list = np.concatenate(( np.ones(N_int) * 15000.0, np.ones(N_int) * 15000.0 ))
+k_list = np.concatenate(( np.ones(N_int) * 15000.0, np.ones(N_int) * 7500.0, np.ones(N_int) * 7500.0, np.ones(N_int) * 7500.0 ))
 
 N_sims = len(temp_list)
 theta_ik = []
@@ -86,6 +89,18 @@ for biasval in namelist_370mid:
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i )
 
+for biasval in namelist_370last:
+    data = np.genfromtxt('interface-last370K/theta{:1.3f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
+for biasval in namelist_370super:
+    data = np.genfromtxt('interface-superDO370K/theta{:1.3f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
 # for biasval in namelist_375int:
 #     data = np.genfromtxt('interface-375K/theta{:1.3f}.txt'.format(biasval))
 #     data = data.reshape((-1, 240))
@@ -121,6 +136,18 @@ for k, th in enumerate(namelist_370mid):
     VO_ik.append( lines[5001:] )
     dtheta_i = np.array(theta_ik[k + N_bias + N_int]) - th
     UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + N_int] * np.square(dtheta_i) )
+
+for k, th in enumerate(namelist_370last):
+    lines = np.genfromtxt("interface-last370K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[5001:] )
+    dtheta_i = np.array(theta_ik[k + N_bias + 2*N_int]) - th
+    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + 2*N_int] * np.square(dtheta_i) )
+
+for k, th in enumerate(namelist_370super):
+    lines = np.genfromtxt("interface-superDO370K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[5001:] )
+    dtheta_i = np.array(theta_ik[k + N_bias + 3*N_int]) - th
+    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + 3*N_int] * np.square(dtheta_i) )
 
 # for k, th in enumerate(namelist_375int):
 #     lines = np.genfromtxt("interface-375K/pot-new.{:1.3f}".format(th))
@@ -210,21 +237,17 @@ bin_centers = np.array(bin_centers)
 
 prob_i = np.exp(-f_i)
 theta_axis = bin_centers
-
-plt.figure()
-plt.plot(theta_axis, f_i, color='#006d2c', marker='o')
-plt.fill_between(theta_axis, f_i - 2*df_i, f_i+2*df_i, color="#006d2c", alpha=0.4)
-plt.xlim(-1.0, 0.0)
-# plt.ylim(-0.2, 20)
-plt.xlabel(r'$\theta$', fontsize=28)
-plt.ylabel(r'$F(\theta)$', fontsize=28)
-plt.show()
+# print theta_axis
+# print theta_axis.shape
 
 # plot E as a function of theta_z bins
 th_flattened = th_ik.reshape(-1)
 uo_flattened = uo_ik.reshape(-1)
 E_bin, edges, y = sp.stats.binned_statistic(th_flattened, uo_flattened, statistic='median', bins=100)
 new_bins = 0.5 * (edges[1:] + edges[:-1])
+print new_bins - theta_axis
+# print new_bins.shape
+
 # plt.plot(new_bins, E_bin, 'r', linewidth=5, alpha=0.4)
 # plt.plot(new_bins, E_bin, 'ro', markersize=9, label='binned energies from all replicas')
 # plt.xlabel(r'$\theta_z$', fontsize=28)
@@ -232,12 +255,9 @@ new_bins = 0.5 * (edges[1:] + edges[:-1])
 # plt.legend(loc='best', fontsize=28)
 # plt.show()
 
-# code to get an estimate of transition temeprature based on current dF and dE values
-# dF already in units of beta*F
-
-disord_min = np.mean(theta_axis[np.where(np.abs(theta_axis - -0.30) < 0.05)])
+disord_min = np.mean(theta_axis[np.where(np.abs(theta_axis - -0.318) < 0.02)])
 ord_min = np.mean(theta_axis[np.where(np.abs(theta_axis - -0.725) < 0.01)])
-disord_F = np.mean(f_i[np.where(np.abs(theta_axis - disord_min) < 0.05)])
+disord_F = np.mean(f_i[np.where(np.abs(theta_axis - disord_min) < 0.01)])
 ord_F = np.mean(f_i[np.where(np.abs(theta_axis - ord_min) < 0.01)])
 
 disord_E = np.mean( E_bin[ np.where(np.abs(new_bins - disord_min) < 0.05) ] )
@@ -247,7 +267,52 @@ dF = ord_F - disord_F
 dE = ord_E - disord_E
 beta_transition = target_beta - dF / dE
 temp_transition = 1 / (kB * beta_transition)
+# code to get energy difference in entropy between the two phases 
+# dF already in units of beta*F
+
+delta_s = ( (f_i / target_beta) - (E_bin) ) / target_temp
+
 print "ord f = {} disord f = {} ord E = {} disord E = {} transition temp = {}K".format(ord_F, disord_F, ord_E, disord_E, temp_transition)
+
+slope = (disord_F - ord_F) / (target_beta * (disord_min - ord_min))
+line = slope * (theta_axis - ord_min) + ord_F/target_beta
+
+plt.figure()
+plt.plot(theta_axis, f_i/target_beta, color='#006d2c', marker='o', label='free energy density')
+plt.fill_between(theta_axis, (f_i - 2*df_i)/target_beta, (f_i+2*df_i)/target_beta, color="#006d2c", alpha=0.4)
+plt.plot(new_bins, E_bin, 'r', linewidth=5, alpha=0.4)
+plt.plot(new_bins, E_bin, 'ro', markersize=9, label='binned energies from all replicas')
+plt.plot(new_bins, delta_s, 'b', linewidth=5, alpha=0.4)
+plt.plot(new_bins, delta_s, 'bv', markersize=9, label='entropy density')
+plt.plot(theta_axis, line, color='r', linestyle='--', linewidth=3)
+plt.plot(theta_axis, line+16.0, color='r', linestyle='--', linewidth=3)
+plt.xlim(-1.0, 0.0)
+# plt.ylim(-0.2, 20)
+plt.xlabel(r'$\theta$', fontsize=28)
+plt.ylabel(r'$F(\theta)$', fontsize=28)
+# plt.legend(loc='best')
+plt.show()
+
+# compute probability area of different phases and plot probability distribution
+ord_indices = np.where(theta_axis <= -0.53)
+disord_indices = np.where(theta_axis > -0.53)
+
+area_ord = integrate.simps(prob_i[ord_indices], theta_axis[ord_indices])
+area_disord = integrate.simps(prob_i[disord_indices], theta_axis[disord_indices])
+print 'probabilities (areas) ord = {} disord = {}'.format(area_ord, area_disord)
+
+entropy_ord = integrate.simps(delta_s[ord_indices], theta_axis[ord_indices])
+entropy_disord = integrate.simps(delta_s[disord_indices], theta_axis[disord_indices])
+print 'entropies ord = {} disord = {}'.format(entropy_ord, entropy_disord)
+
+plt.figure()
+plt.plot(theta_axis, prob_i, color='#006d2c', marker='o')
+plt.xlabel(r'$\theta_z$', fontsize=28)
+plt.ylabel(r'$P(\theta_z)$', fontsize=28)
+plt.show()
+
+for i in range(len(theta_axis)):
+    print "{} {} {} {}".format(theta_axis[i], f_i[i], E_bin[i], delta_s[i])
 
 # # fit gaussians to free energy minima
 # def gauss(x, x0, v, a):
@@ -268,17 +333,4 @@ print "ord f = {} disord f = {} ord E = {} disord E = {} transition temp = {}K".
 # fit_disord = gauss(x_disord, popt[0], popt[1], popt[2])
 # # print popt[0], popt[1], popt[2]
 
-# compute probability area of different phases and plot probability distribution
-ord_indices = np.where(theta_axis <= -0.53)
-disord_indices = np.where(theta_axis > -0.53)
-
-area_ord = integrate.simps(prob_i[ord_indices], theta_axis[ord_indices])
-area_disord = integrate.simps(prob_i[disord_indices], theta_axis[disord_indices])
-print area_ord, area_disord
-
-plt.figure()
-plt.plot(theta_axis, prob_i, color='#006d2c', marker='o')
-plt.xlabel(r'$\theta_z$', fontsize=28)
-plt.ylabel(r'$P(\theta_z)$', fontsize=28)
-plt.show()
 

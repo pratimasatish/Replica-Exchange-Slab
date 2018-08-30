@@ -38,24 +38,58 @@ print theta_lat.shape
 
 # plt.clf();plt.hist(theta_lat[:,:].flatten(), bins=100, normed=True);plt.show()
 
-name_arr = [ [2,4], [3,9], [5,7], [14,1], [10,6], [18,11] ]
+name_arr = [ [2,4], [3,4], [4,4], [5,4], [6,4] ]
 name_arr = np.array(name_arr)
 time_arr = np.arange(T)
 
-name_arr = np.zeros((theta_lat.shape[1]*theta_lat.shape[2], 2))
-count = 0
-for i in range(theta_lat.shape[1]):
-    for j in range(theta_lat.shape[2]):
-        name_arr[count][0] = i
-        name_arr[count][1] = j
-        count = count + 1
+plt.plot(time_arr, theta_lat[:,2,4], 'r')
+plt.plot(time_arr, theta_lat[:,3,4], 'b')
+plt.show()
+plt.plot(time_arr, theta_lat[:,4,4], 'r')
+plt.plot(time_arr, theta_lat[:,5,4], 'b')
+plt.show()
+plt.plot(time_arr, theta_lat[:,6,4], 'r')
+plt.plot(time_arr, theta_lat[:,7,4], 'b')
+plt.show()
 
-color=iter(plt.cm.rainbow(np.linspace(0,1,name_arr.shape[0])))
-for i in name_arr:
-    c = next(color)
-    plt.clf()
-    plt.plot(time_arr, theta_lat[:,i[0], i[1]], color=c, label='site={},{}'.format(i[0], i[1]))
-    plt.show()
+# fig = plt.figure(tight_layout=True, figsize=(10,9))
+# fig.subplots_adjust(hspace=0.0, wspace=0.0)
+# subplot = fig.add_subplot(2, 1, 1)
+# subplot.plot(time_arr, theta_lat[:,2,4], color='r')
+# subplot = fig.add_subplot(2, 1, 2)
+# subplot.plot(time_arr, theta_lat[:,3,4], color='b')
+# 
+# plt.show()
+# 
+# subplot = fig.add_subplot(2, 1, 1)
+# subplot.plot(time_arr, theta_lat[:,4,4], color='k')
+# subplot = fig.add_subplot(2, 1, 2)
+# subplot.plot(time_arr, theta_lat[:,5,4], color='g')
+# 
+# plt.show()
+# 
+# subplot = fig.add_subplot(2, 1, 1)
+# subplot.plot(time_arr, theta_lat[:,6,4], color='c')
+# subplot = fig.add_subplot(2, 1, 2)
+# subplot.plot(time_arr, theta_lat[:,7,4], color='m')
+# 
+# plt.show()
+
+# name_arr = np.zeros((theta_lat.shape[1]*theta_lat.shape[2], 2))
+# count = 0
+# for i in range(theta_lat.shape[1]):
+#     for j in range(theta_lat.shape[2]):
+#         name_arr[count][0] = i
+#         name_arr[count][1] = j
+#         count = count + 1
+
+# color=iter(plt.cm.rainbow(np.linspace(0,1,name_arr.shape[0])))
+# for i in name_arr:
+#     c = next(color)
+# #     plt.clf()
+#     plt.plot(time_arr, theta_lat[:,int(i[0]), int(i[1])], color=c)
+#     plt.title('site={},{}'.format(int(i[0]), int(i[1])))
+#     plt.show()
 
 exit(1)
 
