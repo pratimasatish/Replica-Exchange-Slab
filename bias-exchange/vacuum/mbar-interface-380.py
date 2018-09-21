@@ -81,21 +81,21 @@ for biasval in namelist_380last:
 N_bias = 0
 for k, th in enumerate(namelist_380int):
     lines = np.genfromtxt("interface-start380K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + N_bias]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
 for k, th in enumerate(namelist_380mid):
     lines = np.genfromtxt("interface-mid380K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + N_bias + N_int]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + N_int] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
 for k, th in enumerate(namelist_380last):
     lines = np.genfromtxt("interface-last380K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + N_bias + 2*N_int]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + 2*N_int] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
 # calculate sizes for MBAR arrays
 N_k = [ len(VO_i) for VO_i in VO_ik ]
@@ -119,7 +119,7 @@ for k in range(K):
     # populate off-diagonal blocks in MBAR array; go column by column, i.e. config by config
     for i in range(N_k[k]):
         dtheta = th_ik[k, i] - full_namelist
-        print k, i
+#         print k, i
         u_mbar[ :, sum(N_k[:k]) + i ] = beta_list * ( uo_ik[k,i] + 0.5 * k_list * np.square(dtheta) )
 
 my_mbar = pymbar.MBAR(u_mbar, N_k)
@@ -186,7 +186,7 @@ th_flattened = th_ik.reshape(-1)
 uo_flattened = uo_ik.reshape(-1)
 E_bin, edges, y = sp.stats.binned_statistic(th_flattened, uo_flattened, statistic='median', bins=100)
 new_bins = 0.5 * (edges[1:] + edges[:-1])
-print new_bins - theta_axis
+# print new_bins - theta_axis
 # print new_bins.shape
 
 # plt.plot(new_bins, E_bin, 'r', linewidth=5, alpha=0.4)
@@ -211,7 +211,7 @@ temp_transition = 1 / (kB * beta_transition)
 # code to get energy difference in entropy between the two phases 
 # dF already in units of beta*F
 
-delta_s = ( (f_i / target_beta) - (E_bin) ) / target_temp
+delta_s = -( (f_i / target_beta) - (E_bin) ) / target_temp
 
 print "ord f = {} disord f = {} ord E = {} disord E = {} transition temp = {}K".format(ord_F, disord_F, ord_E, disord_E, temp_transition)
 
@@ -252,35 +252,41 @@ plt.xlabel(r'$\theta_z$', fontsize=28)
 plt.ylabel(r'$P(\theta_z)$', fontsize=28)
 plt.show()
 
+# print out relevant energy and entropy values
 for i in range(len(theta_axis)):
     print "{} {} {} {}".format(theta_axis[i], f_i[i], E_bin[i], delta_s[i])
 
-# fit gaussians to free energy minima to get partition functions
-def spring(x, x0, k):
-    return 0.5 * k * (x - x0) ** 2
+# compute entropy using MBAR's functionality to do so
+# df, err_df, du, err_du, ds, err_ds = my_mbar.computeEntropyAndEnthalpy()
+# print "mbar computed entropy"
+# print ds[0], ds[41]
 
-ord_spring = np.where((theta_axis >= -0.74) * (theta_axis <=-0.67))
-x_ord = theta_axis[ord_spring]
-y_ord = f_i[ord_spring]
-# popt, pcov = curve_fit(gauss, x_ord, y_ord, p0=(-0.75, 0.25, 0.8))
-popt, pcov = curve_fit(spring, x_ord, y_ord)
-fit_ord = gauss(x_ord, popt[0], popt[1])
-print popt[0], popt[1], popt[2]
-
-Q_ord = integrate.simps(fit_ord, x_ord)
-fullF_ord = -target_beta * np.log(Q_ord)
-
-disord_spring = np.where((theta_axis >= -0.38) * (theta_axis <=0.13))
-x_disord = theta_axis[disord_spring]
-y_disord = f_i[disord_spring]
-popt, pcov = curve_fit(spring, x_disord, y_disord)
-fit_disord = gauss(x_disord, popt[0], popt[1])
-print popt[0], popt[1], popt[2]
-
-Q_disord = integrate.simps(fit_disord, x_disord)
-fullF_disord = -target_beta * np.log(Q_disord)
-
-print "partition functions: ord = {} disord = {}".format(Q_ord, Q_disord)
-print "total free energies: ord = {} disord = {}".format(fullF_ord, fullF_disord)
+# # fit gaussians to free energy minima to get partition functions
+# def spring(x, x0, k):
+#     return 0.5 * k * (x - x0) ** 2
+# 
+# ord_spring = np.where((theta_axis >= -0.74) * (theta_axis <=-0.67))
+# x_ord = theta_axis[ord_spring]
+# y_ord = f_i[ord_spring]
+# # popt, pcov = curve_fit(gauss, x_ord, y_ord, p0=(-0.75, 0.25, 0.8))
+# popt, pcov = curve_fit(spring, x_ord, y_ord)
+# fit_ord = gauss(x_ord, popt[0], popt[1])
+# print popt[0], popt[1], popt[2]
+# 
+# Q_ord = integrate.simps(fit_ord, x_ord)
+# fullF_ord = -target_beta * np.log(Q_ord)
+# 
+# disord_spring = np.where((theta_axis >= -0.38) * (theta_axis <=0.13))
+# x_disord = theta_axis[disord_spring]
+# y_disord = f_i[disord_spring]
+# popt, pcov = curve_fit(spring, x_disord, y_disord)
+# fit_disord = gauss(x_disord, popt[0], popt[1])
+# print popt[0], popt[1], popt[2]
+# 
+# Q_disord = integrate.simps(fit_disord, x_disord)
+# fullF_disord = -target_beta * np.log(Q_disord)
+# 
+# print "partition functions: ord = {} disord = {}".format(Q_ord, Q_disord)
+# print "total free energies: ord = {} disord = {}".format(fullF_ord, fullF_disord)
 
 

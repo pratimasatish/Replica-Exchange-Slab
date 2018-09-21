@@ -41,12 +41,15 @@ N_int = len(namelist_370int)
 
 # full_namelist = np.concatenate(( namelist_370int, namelist_370mid, namelist_375int ))
 # temp_list = np.concatenate(( np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 375.0  ))
-full_namelist = np.concatenate(( namelist_370int, namelist_370mid, namelist_370last, namelist_370super ))
-temp_list = np.concatenate(( np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 370.0 ))
+# full_namelist = np.concatenate(( namelist_370int, namelist_370mid, namelist_370last, namelist_370super ))
+# temp_list = np.concatenate(( np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 370.0 ))
+full_namelist = np.concatenate(( namelist_370int, namelist_370mid, namelist_370last ))
+temp_list = np.concatenate(( np.ones(N_int) * 370.0, np.ones(N_int) * 370.0, np.ones(N_int) * 370.0 ))
 
 temp_sim = 370
 beta_list = 1/(kB * temp_list)
-k_list = np.concatenate(( np.ones(N_int) * 15000.0, np.ones(N_int) * 7500.0, np.ones(N_int) * 7500.0, np.ones(N_int) * 7500.0 ))
+# k_list = np.concatenate(( np.ones(N_int) * 15000.0, np.ones(N_int) * 7500.0, np.ones(N_int) * 7500.0, np.ones(N_int) * 7500.0 ))
+k_list = np.concatenate(( np.ones(N_int) * 15000.0, np.ones(N_int) * 7500.0, np.ones(N_int) * 7500.0 ))
 
 N_sims = len(temp_list)
 theta_ik = []
@@ -95,11 +98,11 @@ for biasval in namelist_370last:
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i )
 
-for biasval in namelist_370super:
-    data = np.genfromtxt('interface-superDO370K/theta{:1.3f}.txt'.format(biasval))
-    data = data.reshape((-1, 240))
-    data_i = np.mean(data, axis=1)
-    theta_ik.append( data_i )
+# for biasval in namelist_370super:
+#     data = np.genfromtxt('interface-superDO370K/theta{:1.3f}.txt'.format(biasval))
+#     data = data.reshape((-1, 240))
+#     data_i = np.mean(data, axis=1)
+#     theta_ik.append( data_i )
 
 # for biasval in namelist_375int:
 #     data = np.genfromtxt('interface-375K/theta{:1.3f}.txt'.format(biasval))
@@ -127,27 +130,30 @@ for biasval in namelist_370super:
 N_bias = 0
 for k, th in enumerate(namelist_370int):
     lines = np.genfromtxt("interface-370K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + N_bias]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias] * np.square(dtheta_i) )
+#     UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
 for k, th in enumerate(namelist_370mid):
     lines = np.genfromtxt("interface-mid370K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + N_bias + N_int]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + N_int] * np.square(dtheta_i) )
+#     UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + N_int] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
 for k, th in enumerate(namelist_370last):
     lines = np.genfromtxt("interface-last370K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + N_bias + 2*N_int]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + 2*N_int] * np.square(dtheta_i) )
+#     UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + 2*N_int] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
-for k, th in enumerate(namelist_370super):
-    lines = np.genfromtxt("interface-superDO370K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
-    dtheta_i = np.array(theta_ik[k + N_bias + 3*N_int]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + 3*N_int] * np.square(dtheta_i) )
+# for k, th in enumerate(namelist_370super):
+#     lines = np.genfromtxt("interface-superDO370K/pot-new.{:1.3f}".format(th))
+#     VO_ik.append( lines[5001:] )
+#     dtheta_i = np.array(theta_ik[k + N_bias + 3*N_int]) - th
+#     UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias + 3*N_int] * np.square(dtheta_i) )
 
 # for k, th in enumerate(namelist_375int):
 #     lines = np.genfromtxt("interface-375K/pot-new.{:1.3f}".format(th))
@@ -177,7 +183,7 @@ for k in range(K):
     # populate off-diagonal blocks in MBAR array; go column by column, i.e. config by config
     for i in range(N_k[k]):
         dtheta = th_ik[k, i] - full_namelist
-        print k, i
+#         print k, i
         u_mbar[ :, sum(N_k[:k]) + i ] = beta_list * ( uo_ik[k,i] + 0.5 * k_list * np.square(dtheta) )
 
 my_mbar = pymbar.MBAR(u_mbar, N_k)
@@ -245,7 +251,7 @@ th_flattened = th_ik.reshape(-1)
 uo_flattened = uo_ik.reshape(-1)
 E_bin, edges, y = sp.stats.binned_statistic(th_flattened, uo_flattened, statistic='median', bins=100)
 new_bins = 0.5 * (edges[1:] + edges[:-1])
-print new_bins - theta_axis
+# print new_bins - theta_axis
 # print new_bins.shape
 
 # plt.plot(new_bins, E_bin, 'r', linewidth=5, alpha=0.4)
@@ -270,7 +276,7 @@ temp_transition = 1 / (kB * beta_transition)
 # code to get energy difference in entropy between the two phases 
 # dF already in units of beta*F
 
-delta_s = ( (f_i / target_beta) - (E_bin) ) / target_temp
+delta_s = -( (f_i / target_beta) - (E_bin) ) / target_temp
 
 print "ord f = {} disord f = {} ord E = {} disord E = {} transition temp = {}K".format(ord_F, disord_F, ord_E, disord_E, temp_transition)
 
