@@ -59,18 +59,36 @@ pdist_half /= pdist_half.max()
 # print bin_centres.shape
 plt.plot(bin_centres, pdist, 'ro', label='single ligand dist')
 plt.plot(bin_centres, pdist, 'r', linewidth=5, alpha=0.4)
-plt.plot(bin_centres_t, pdist_t, 'bv', label='avg over time (50 ns) dist')
+plt.plot(bin_centres_t, pdist_t, 'bv', label='avg over time (100 ns) dist')
 plt.plot(bin_centres_t, pdist_t, 'b', linewidth=5, alpha=0.4)
-plt.plot(bin_centres_half, pdist_half, 'k^', label='avg over time (first 25 ns) dist')
+plt.plot(bin_centres_half, pdist_half, 'k^', label='avg over time (first 50 ns) dist')
 plt.plot(bin_centres_half, pdist_half, 'k', linewidth=5, alpha=0.4)
 plt.legend(loc='best')
 plt.show()
+
+# lattice plot of first-half time averaged means
+plt.imshow(theta_half_mean, aspect=0.6, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.4, vmax=0.1)
+# plt.imshow(theta_mean, aspect=0.6, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.8, vmax=-0.1)
+plt.title('site-specific time-average (first 50 ns)')
+plt.xticks(np.arange(0, 12, 1))
+plt.yticks(np.arange(0, 20, 1))
+plt.xlim(-0.5,11.5)
+plt.ylim(-0.5,19.5)
+for i in np.arange(-0.5,12,1.0):
+    plt.vlines(i, -0.5, 19.5, linestyle='solid', linewidth=2)
+for i in np.arange(-0.5,19,1.0):
+    plt.hlines(i, -0.5, 11.5, linestyle='solid', linewidth=2)
+plt.colorbar()
+plt.show()
+
+# lattice plot of full data time averaged means
 
 # print theta_mean.shape
 # print 'x-mean', np.mean(theta_mean, axis=0)
 # print 'z-mean', np.mean(theta_mean, axis=1)
 plt.imshow(theta_mean, aspect=0.6, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.4, vmax=0.1)
 # plt.imshow(theta_mean, aspect=0.6, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.8, vmax=-0.1)
+plt.title('site-specific time-average (full 100 ns)')
 plt.xticks(np.arange(0, 12, 1))
 plt.yticks(np.arange(0, 20, 1))
 plt.xlim(-0.5,11.5)
@@ -125,69 +143,69 @@ step = 5
 # for i in range(len(time_arr)):
 #     print '{} {}'.format(time_arr[i], theta_tcorr[i])
 
-# TCF for average angle
-
-theta_avg_t = theta_mean[0:T:step]
-# theta_avg_t -= avg
-time_arr = np.linspace(0, T, T/step)/1000
-plt.plot(time_arr, theta_avg_t, 'ro')
-plt.plot(time_arr, theta_avg_t, 'r', linewidth=4, alpha=0.5)
-plt.show()
-
-# print '#time series'
-# for i in range(len(time_arr)):
-#     print "{} {}".format(time_arr[i], theta_avg_t[i])
-
-theta_avgcorr = np.zeros(T/step)
-ACF = np.correlate(theta_avg_t, theta_avg_t, mode='full')
-theta_avgcorr = theta_avgcorr + ACF[ACF.size/2:]
- 
-plt.subplot(121)
-plt.semilogy(time_arr, theta_avgcorr/theta_avgcorr[0], 'ro')
-plt.subplot(122)
-plt.plot(time_arr, theta_avgcorr/theta_avgcorr[0], 'ro')
-plt.tight_layout()
-plt.show()
-
-# print out time-correlation data
-print '#variance from correlation calc {}'.format(theta_avgcorr[0])
-theta_avgcorr /= theta_avgcorr[0]
-print '#time correlation of mean angle'
-for i in range(len(time_arr)):
-    print '{} {}'.format(time_arr[i], theta_avgcorr[i])
-
-# # CALCULATE CROSS TIME CORRELATION FUNCTION
+# # TCF for average angle
 # 
-# # remove per-ligand average
-# theta_t[:] = theta_t[:] - np.mean(theta_t, axis=0)
-# 
-# # mean angle time-series with mean removed
 # theta_avg_t = theta_mean[0:T:step]
 # theta_avg_t -= avg
-# 
-# theta_t = theta_t[0:T:step,:]
-# theta_tcorr = np.zeros(T/step)
-# for i in range(240):
-#     lig = theta_t[:, i] 
-# #     print lig.shape
-#     ACF = np.correlate(lig, theta_avg_t, mode='full')
-# #     theta_tcorr = theta_tcorr + ACF[(ACF.size/2 - 1):]
-#     theta_tcorr = theta_tcorr + ACF[ACF.size/2:]
-# 
 # time_arr = np.linspace(0, T, T/step)/1000
+# plt.plot(time_arr, theta_avg_t, 'ro')
+# plt.plot(time_arr, theta_avg_t, 'r', linewidth=4, alpha=0.5)
+# plt.show()
+# 
+# # print '#time series'
+# # for i in range(len(time_arr)):
+# #     print "{} {}".format(time_arr[i], theta_avg_t[i])
+# 
+# theta_avgcorr = np.zeros(T/step)
+# ACF = np.correlate(theta_avg_t, theta_avg_t, mode='full')
+# theta_avgcorr = theta_avgcorr + ACF[ACF.size/2:]
 #  
 # plt.subplot(121)
-# plt.semilogy(time_arr, theta_tcorr/(theta_tcorr[0]), 'ro')
+# plt.semilogy(time_arr, theta_avgcorr/theta_avgcorr[0], 'ro')
 # plt.subplot(122)
-# plt.plot(time_arr, theta_tcorr/(theta_tcorr[0]), 'ro')
+# plt.plot(time_arr, theta_avgcorr/theta_avgcorr[0], 'ro')
 # plt.tight_layout()
 # plt.show()
 # 
 # # print out time-correlation data
-# theta_tcorr /= (theta_tcorr[0])
-# print '#cross time correlation'
+# print '#variance from correlation calc {}'.format(theta_avgcorr[0])
+# theta_avgcorr /= theta_avgcorr[0]
+# print '#time correlation of mean angle'
 # for i in range(len(time_arr)):
-#     print '{} {}'.format(time_arr[i], theta_tcorr[i])
+#     print '{} {}'.format(time_arr[i], theta_avgcorr[i])
+
+# CALCULATE CROSS TIME CORRELATION FUNCTION
+
+# remove per-ligand average
+theta_t[:] = theta_t[:] - np.mean(theta_t, axis=0)
+
+# mean angle time-series with mean removed
+theta_avg_t = theta_mean[0:T:step]
+theta_avg_t -= avg
+
+theta_t = theta_t[0:T:step,:]
+theta_tcorr = np.zeros(T/step)
+for i in range(240):
+    lig = theta_t[:, i] 
+#     print lig.shape
+    ACF = np.correlate(lig, theta_avg_t, mode='full')
+#     theta_tcorr = theta_tcorr + ACF[(ACF.size/2 - 1):]
+    theta_tcorr = theta_tcorr + ACF[ACF.size/2:]
+
+time_arr = np.linspace(0, T, T/step)/1000
+ 
+plt.subplot(121)
+plt.semilogy(time_arr, theta_tcorr/(theta_tcorr[0]), 'ro')
+plt.subplot(122)
+plt.plot(time_arr, theta_tcorr/(theta_tcorr[0]), 'ro')
+plt.tight_layout()
+plt.show()
+
+# print out time-correlation data
+theta_tcorr /= (theta_tcorr[0])
+print '#cross time correlation'
+for i in range(len(time_arr)):
+    print '{} {}'.format(time_arr[i], theta_tcorr[i])
 
 exit(1)
 

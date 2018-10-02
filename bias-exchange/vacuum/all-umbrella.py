@@ -16,19 +16,20 @@ from mpl_toolkits.mplot3d import Axes3D
 # initialise list of temperatures 
 kB = 1.3806503 * 6.0221415 / 4184.0
 
-namelist_350 = np.array( [-0.750, -0.700, -0.675, -0.625, -0.600, -0.550, -0.500, -0.450, -0.425, -0.400, -0.375, -0.350, -0.275, -0.225, -0.175, -0.125] )
-namelist_365 = np.array( [-0.750, -0.700, -0.675, -0.625, -0.600, -0.550, -0.500, -0.450, -0.425, -0.400, -0.375, -0.350, -0.275, -0.225, -0.175, -0.125] )
-namelist_370 = np.array( [-0.750, -0.700, -0.650, -0.625, -0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.425, -0.350, -0.275, -0.225, -0.175, -0.125] )
-namelist_375 = np.array( [-0.750, -0.700, -0.650, -0.625, -0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.425, -0.350, -0.275, -0.225, -0.175, -0.125] )
-namelist_380 = np.array( [-0.750, -0.700, -0.650, -0.625, -0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.425, -0.350, -0.275, -0.225, -0.175, -0.125] )
+namelist_370int = np.array( [-0.750, -0.700, -0.690, -0.680, -0.670, -0.660, -0.650, -0.640, -0.630, -0.620, -0.610, -0.600, -0.575, -0.550] )
+namelist_370mid = np.array( [-0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.480, -0.460, -0.440, -0.420, -0.400, -0.380, -0.360, -0.340] )
+namelist_370last = np.array( [-0.370, -0.350, -0.330, -0.310, -0.290, -0.270, -0.250, -0.230, -0.210, -0.190, -0.170, -0.150, -0.130, -0.110] )
+namelist_380int = np.array( [-0.750, -0.700, -0.690, -0.680, -0.670, -0.660, -0.650, -0.640, -0.630, -0.620, -0.610, -0.600, -0.575, -0.550] )
+namelist_380mid = np.array( [-0.600, -0.580, -0.560, -0.540, -0.520, -0.500, -0.480, -0.460, -0.440, -0.420, -0.400, -0.380, -0.360, -0.340] )
+namelist_380last = np.array( [-0.370, -0.350, -0.330, -0.310, -0.290, -0.270, -0.250, -0.230, -0.210, -0.190, -0.170, -0.150, -0.130, -0.110] )
 
-full_namelist = np.concatenate(( namelist_350, namelist_365, namelist_370, namelist_375, namelist_380 ))
+full_namelist = np.concatenate(( namelist_370int, namelist_370mid, namelist_370last, namelist_380int, namelist_380mid, namelist_380last ))
 T_bias = 5000
-N_bias = len(namelist_370)
+N_bias = len(namelist_370int)
 
-temp_list = np.concatenate(( np.ones(N_bias) * 350.0, np.ones(N_bias) * 365.0, np.ones(N_bias) * 370.0, np.ones(N_bias) * 375.0, np.ones(N_bias) * 380.0 ))
+temp_list = np.concatenate(( np.ones(3 * N_bias) * 370.0, np.ones(3 * N_bias) * 380.0 ))
 beta_list = 1/(kB * temp_list)
-k_list = np.ones(len(full_namelist)) * 1500.0
+k_list = np.concatenate(( np.ones(N_bias) * 15000.0, np.ones(N_bias) * 7500.0, np.ones(N_bias) * 7500.0, np.ones(N_bias) * 7500.0, np.ones(N_bias) * 7500.0, np.ones(N_bias) * 7500.0 ))
 
 N_sims = len(temp_list)
 theta_ik = []
@@ -43,68 +44,78 @@ plt.rc('xtick', labelsize=28)
 plt.rc('ytick', labelsize=28)
 
 # build up theta matrix
-
-for biasval in namelist_350:
-    data = np.genfromtxt('350K/theta{:1.3f}.txt'.format(biasval))
-    data = data.reshape((-1, 240))
-    data_i = np.mean(data, axis=1)
-    theta_ik.append( data_i[1:] )
-
-for biasval in namelist_365:
-    data = np.genfromtxt('365K/theta{:1.3f}.txt'.format(biasval))
-    data = data.reshape((-1, 240))
-    data_i = np.mean(data, axis=1)
-    theta_ik.append( data_i[1:] )
-
-for biasval in namelist_370:
-    data = np.genfromtxt('370K/theta{:1.3f}.txt'.format(biasval))
+for biasval in namelist_370int:
+    data = np.genfromtxt('interface-370K/theta{:1.3f}.txt'.format(biasval))
     data = data.reshape((-1, 240))
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i )
 
-for biasval in namelist_375:
-    data = np.genfromtxt('375K/theta{:1.3f}.txt'.format(biasval))
+for biasval in namelist_370mid:
+    data = np.genfromtxt('interface-mid370K/theta{:1.3f}.txt'.format(biasval))
     data = data.reshape((-1, 240))
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i )
 
-for biasval in namelist_380:
-    data = np.genfromtxt('380K/theta{:1.3f}.txt'.format(biasval))
+for biasval in namelist_370last:
+    data = np.genfromtxt('interface-last370K/theta{:1.3f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
+for biasval in namelist_380int:
+    data = np.genfromtxt('interface-start380K/theta{:1.3f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
+for biasval in namelist_380mid:
+    data = np.genfromtxt('interface-mid380K/theta{:1.3f}.txt'.format(biasval))
+    data = data.reshape((-1, 240))
+    data_i = np.mean(data, axis=1)
+    theta_ik.append( data_i )
+
+for biasval in namelist_380last:
+    data = np.genfromtxt('interface-last380K/theta{:1.3f}.txt'.format(biasval))
     data = data.reshape((-1, 240))
     data_i = np.mean(data, axis=1)
     theta_ik.append( data_i )
 
 # build up potential matrix
-
-for k, th in enumerate(namelist_350):
-    lines = np.genfromtxt("350K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+for k, th in enumerate(namelist_370int):
+    lines = np.genfromtxt("interface-370K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
-for k, th in enumerate(namelist_365):
-    lines = np.genfromtxt("365K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+for k, th in enumerate(namelist_370mid):
+    lines = np.genfromtxt("interface-mid370K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + N_bias]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + N_bias] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
-for k, th in enumerate(namelist_370):
-    lines = np.genfromtxt("370K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+for k, th in enumerate(namelist_370last):
+    lines = np.genfromtxt("interface-last370K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + 2*N_bias]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + 2*N_bias] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
-for k, th in enumerate(namelist_375):
-    lines = np.genfromtxt("375K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
+for k, th in enumerate(namelist_380int):
+    lines = np.genfromtxt("interface-start380K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[:] )
     dtheta_i = np.array(theta_ik[k + 3*N_bias]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + 3*N_bias] * np.square(dtheta_i) )
+    UO_ik.append( lines[:] )
 
-for k, th in enumerate(namelist_380):
-    lines = np.genfromtxt("380K/pot-new.{:1.3f}".format(th))
-    VO_ik.append( lines[5001:] )
-    dtheta_i = np.array(theta_ik[k + 3*N_bias]) - th
-    UO_ik.append( lines[5001:] - 0.5 * k_list[k + 3*N_bias] * np.square(dtheta_i) )
+for k, th in enumerate(namelist_380mid):
+    lines = np.genfromtxt("interface-mid380K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[:] )
+    dtheta_i = np.array(theta_ik[k + 4*N_bias]) - th
+    UO_ik.append( lines[:] )
+
+for k, th in enumerate(namelist_380last):
+    lines = np.genfromtxt("interface-last380K/pot-new.{:1.3f}".format(th))
+    VO_ik.append( lines[:] )
+    dtheta_i = np.array(theta_ik[k + 5*N_bias]) - th
+    UO_ik.append( lines[:] )
 
 # calculate sizes for MBAR arrays
 N_k = [ len(VO_i) for VO_i in VO_ik ]
@@ -174,7 +185,7 @@ for i in range(max_bins):
         # increment number of bins
         nbins += 1
 
-target_temp = 372.0
+target_temp = 375.6
 target_beta = 1/(kB*target_temp)
 u_kn = np.zeros([K, N_max])
 # populate diagonal blocks in MBAR array
@@ -197,53 +208,13 @@ plt.xlabel(r'$\theta$', fontsize=28)
 plt.ylabel(r'$F(\theta)$', fontsize=28)
 plt.show()
 
-# plot E as a function of theta_z bins
-th_flattened = th_ik.reshape(-1)
-uo_flattened = uo_ik.reshape(-1)
-E_bin, edges, y = sp.stats.binned_statistic(th_flattened, uo_flattened, statistic='median', bins=100)
-new_bins = 0.5 * (edges[1:] + edges[:-1])
-# plt.plot(new_bins, E_bin, 'r', linewidth=5, alpha=0.4)
-# plt.plot(new_bins, E_bin, 'ro', markersize=9, label='binned energies from all replicas')
-# plt.xlabel(r'$\theta_z$', fontsize=28)
-# plt.ylabel(r'$\langle E\rangle$', fontsize=28)
-# plt.legend(loc='best', fontsize=28)
-# plt.show()
-
-# code to get an estimate of transition temeprature based on current dF and dE values
-# dF already in units of beta*F
-
 disord_min = np.mean(theta_axis[np.where(np.abs(theta_axis - -0.30) < 0.05)])
 ord_min = np.mean(theta_axis[np.where(np.abs(theta_axis - -0.725) < 0.01)])
 disord_F = np.mean(f_i[np.where(np.abs(theta_axis - disord_min) < 0.05)])
 ord_F = np.mean(f_i[np.where(np.abs(theta_axis - ord_min) < 0.01)])
 
-disord_E = np.mean( E_bin[ np.where(np.abs(new_bins - disord_min) < 0.05) ] )
-ord_E = np.mean( E_bin[ np.where(np.abs(new_bins - ord_min) < 0.05) ] )
-
 dF = ord_F - disord_F
-dE = ord_E - disord_E
-beta_transition = target_beta - dF / dE
-temp_transition = 1 / (kB * beta_transition)
-print "ord f = {} disord f = {} ord E = {} disord E = {} transition temp = {}K".format(ord_F, disord_F, ord_E, disord_E, temp_transition)
-
-# # fit gaussians to free energy minima
-# def gauss(x, x0, v, a):
-#     return a * np.exp(-(x - x0)**2 / (2 * v))
-# 
-# ord_spring = np.where((theta_axis >= -0.75) * (theta_axis <=-0.69))
-# x_ord = theta_axis[ord_spring]
-# y_ord = prob_i[ord_spring]
-# # popt, pcov = curve_fit(gauss, x_ord, y_ord, p0=(-0.75, 0.25, 0.8))
-# popt, pcov = curve_fit(gauss, x_ord, y_ord)
-# fit_ord = gauss(x_ord, popt[0], popt[1], popt[2])
-# # print popt[0], popt[1], popt[2]
-# 
-# disord_spring = np.where((theta_axis >= -0.28) * (theta_axis <=0.15))
-# x_disord = theta_axis[disord_spring]
-# y_disord = prob_i[disord_spring]
-# popt, pcov = curve_fit(gauss, x_disord, y_disord)
-# fit_disord = gauss(x_disord, popt[0], popt[1], popt[2])
-# # print popt[0], popt[1], popt[2]
+print "ord f = {} disord f = {}".format(ord_F, disord_F)
 
 # compute probability area of different phases and plot probability distribution
 ord_indices = np.where(theta_axis <= -0.53)
@@ -259,3 +230,6 @@ plt.xlabel(r'$\theta_z$', fontsize=28)
 plt.ylabel(r'$P(\theta_z)$', fontsize=28)
 plt.show()
 
+print "#free energy at {}".format(target_temp)
+for i in range(len(theta_axis)):
+    print "{} {}".format(theta_axis[i], f_i[i])

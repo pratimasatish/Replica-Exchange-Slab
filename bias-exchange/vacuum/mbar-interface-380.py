@@ -261,32 +261,38 @@ for i in range(len(theta_axis)):
 # print "mbar computed entropy"
 # print ds[0], ds[41]
 
-# # fit gaussians to free energy minima to get partition functions
-# def spring(x, x0, k):
-#     return 0.5 * k * (x - x0) ** 2
-# 
-# ord_spring = np.where((theta_axis >= -0.74) * (theta_axis <=-0.67))
-# x_ord = theta_axis[ord_spring]
-# y_ord = f_i[ord_spring]
-# # popt, pcov = curve_fit(gauss, x_ord, y_ord, p0=(-0.75, 0.25, 0.8))
-# popt, pcov = curve_fit(spring, x_ord, y_ord)
-# fit_ord = gauss(x_ord, popt[0], popt[1])
-# print popt[0], popt[1], popt[2]
-# 
-# Q_ord = integrate.simps(fit_ord, x_ord)
-# fullF_ord = -target_beta * np.log(Q_ord)
-# 
-# disord_spring = np.where((theta_axis >= -0.38) * (theta_axis <=0.13))
-# x_disord = theta_axis[disord_spring]
-# y_disord = f_i[disord_spring]
-# popt, pcov = curve_fit(spring, x_disord, y_disord)
-# fit_disord = gauss(x_disord, popt[0], popt[1])
-# print popt[0], popt[1], popt[2]
-# 
-# Q_disord = integrate.simps(fit_disord, x_disord)
-# fullF_disord = -target_beta * np.log(Q_disord)
-# 
-# print "partition functions: ord = {} disord = {}".format(Q_ord, Q_disord)
-# print "total free energies: ord = {} disord = {}".format(fullF_ord, fullF_disord)
+# finding free energy profile at coexistence temperature
+u_kn = np.zeros([K, N_max])
+# populate diagonal blocks in MBAR array
+for k in range(K):
+    u_kn[k] = beta_transition * uo_ik[k]
+u_n = np.reshape(u_kn, N_sims*N_max)
 
+[f_trans, df_trans] = my_mbar.computePMF(u_kn, bin_kn, nbins)
+
+plt.figure()
+plt.plot(theta_axis, f_trans/beta_transition, color='#006d2c', marker='o', label='free energy density at coexistence')
+plt.fill_between(theta_axis, (f_trans - 2*df_trans)/beta_transition, (f_trans+2*df_trans)/beta_transition, color="#006d2c", alpha=0.4)
+plt.xlim(-1.0, 0.0)
+# plt.ylim(-0.2, 20)
+plt.xlabel(r'$\theta$', fontsize=28)
+plt.ylabel(r'$F(\theta)$', fontsize=28)
+# plt.legend(loc='best')
+plt.show()
+
+prob_trans = np.exp(-f_trans)
+
+area_ord = integrate.simps(prob_trans[ord_indices], theta_axis[ord_indices])
+area_disord = integrate.simps(prob_trans[disord_indices], theta_axis[disord_indices])
+print 'coexistence probabilities (areas) ord = {} disord = {}'.format(area_ord, area_disord)
+
+plt.figure()
+plt.plot(theta_axis, prob_trans, color='#006d2c', marker='o')
+plt.xlabel(r'$\theta_z$', fontsize=28)
+plt.ylabel(r'$P(\theta_z)$', fontsize=28)
+plt.show()
+
+print "coexistence data:"
+for i in range(len(theta_axis)):
+    print "{} {}".format(theta_axis[i], f_trans[i])
 
