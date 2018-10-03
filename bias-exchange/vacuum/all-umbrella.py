@@ -230,6 +230,6 @@ plt.xlabel(r'$\theta_z$', fontsize=28)
 plt.ylabel(r'$P(\theta_z)$', fontsize=28)
 plt.show()
 
-print "#free energy at {}".format(target_temp)
+print "#beta*free energy at {}".format(target_temp)
 for i in range(len(theta_axis)):
     print "{} {}".format(theta_axis[i], f_i[i])

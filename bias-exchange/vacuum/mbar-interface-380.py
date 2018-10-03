@@ -254,7 +254,7 @@ plt.show()
 
 # print out relevant energy and entropy values
 for i in range(len(theta_axis)):
-    print "{} {} {} {}".format(theta_axis[i], f_i[i], E_bin[i], delta_s[i])
+    print "{} {} {} {}".format(theta_axis[i], f_i[i] / target_beta, E_bin[i], delta_s[i])
 
 # compute entropy using MBAR's functionality to do so
 # df, err_df, du, err_du, ds, err_ds = my_mbar.computeEntropyAndEnthalpy()

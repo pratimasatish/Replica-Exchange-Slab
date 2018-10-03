@@ -179,35 +179,35 @@ step = 5
 # remove per-ligand average
 theta_t[:] = theta_t[:] - np.mean(theta_t, axis=0)
 
-# mean angle time-series with mean removed
-theta_avg_t = theta_mean[0:T:step]
-theta_avg_t -= avg
+# # mean angle time-series with mean removed
+# theta_avg_t = theta_mean[0:T:step]
+# theta_avg_t -= avg
+# 
+# theta_t = theta_t[0:T:step,:]
+# theta_tcorr = np.zeros(T/step)
+# for i in range(240):
+#     lig = theta_t[:, i] 
+# #     print lig.shape
+#     ACF = np.correlate(lig, theta_avg_t, mode='full')
+# #     theta_tcorr = theta_tcorr + ACF[(ACF.size/2 - 1):]
+#     theta_tcorr = theta_tcorr + ACF[ACF.size/2:]
+# 
+# time_arr = np.linspace(0, T, T/step)/1000
+#  
+# plt.subplot(121)
+# plt.semilogy(time_arr, theta_tcorr/(theta_tcorr[0]), 'ro')
+# plt.subplot(122)
+# plt.plot(time_arr, theta_tcorr/(theta_tcorr[0]), 'ro')
+# plt.tight_layout()
+# plt.show()
+# 
+# # print out time-correlation data
+# theta_tcorr /= (theta_tcorr[0])
+# print '#cross time correlation'
+# for i in range(len(time_arr)):
+#     print '{} {}'.format(time_arr[i], theta_tcorr[i])
 
-theta_t = theta_t[0:T:step,:]
-theta_tcorr = np.zeros(T/step)
-for i in range(240):
-    lig = theta_t[:, i] 
-#     print lig.shape
-    ACF = np.correlate(lig, theta_avg_t, mode='full')
-#     theta_tcorr = theta_tcorr + ACF[(ACF.size/2 - 1):]
-    theta_tcorr = theta_tcorr + ACF[ACF.size/2:]
-
-time_arr = np.linspace(0, T, T/step)/1000
- 
-plt.subplot(121)
-plt.semilogy(time_arr, theta_tcorr/(theta_tcorr[0]), 'ro')
-plt.subplot(122)
-plt.plot(time_arr, theta_tcorr/(theta_tcorr[0]), 'ro')
-plt.tight_layout()
-plt.show()
-
-# print out time-correlation data
-theta_tcorr /= (theta_tcorr[0])
-print '#cross time correlation'
-for i in range(len(time_arr)):
-    print '{} {}'.format(time_arr[i], theta_tcorr[i])
-
-exit(1)
+# exit(1)
 
 #     for j in range(T):
 #         for k in range(T-j):
@@ -242,6 +242,7 @@ if args.savefigs:
         plt.clf()
 
 
+# spatial correlation for full 100 ns
 all_corr_xz = []
 samplez = 10
 # DT = t_steps / samplez
@@ -282,24 +283,24 @@ d_corr_xz = np.std (all_corr_xz, axis=0) / np.sqrt(samplez)
 # print np.mean(np.array(var_list))
 # print m_corr_xz[1:,0].shape, range(1,X/2)
 
-# using fourier transforms to calculate correlation function
-ft_corr = np.zeros((X, Z))
-for i in range(T):
-    ft_theta_lat = np.fft.rfft2(theta_lat[i, :, :])
-    square_ft = np.absolute(ft_theta_lat) ** 2
-    ft_corr = ft_corr + np.fft.irfft2(square_ft)
-    x = range(X)
-    z = range(Z)
-    xv, zv = np.meshgrid(x, z)
-
-ft_corr = ft_corr / T
-# print ft_corr.shape
-# print xv.shape
-x_ft = np.mean(ft_corr, axis=1)
-z_ft = np.mean(ft_corr, axis=0)
-
-plt.plot(range(0,X), x_ft / x_ft[0], c='r', linewidth=2, label='X-ft')
-plt.plot(range(0,Z), z_ft / z_ft[0], c='k', linewidth=2, label='Z-ft')
+# # using fourier transforms to calculate correlation function
+# ft_corr = np.zeros((X, Z))
+# for i in range(T):
+#     ft_theta_lat = np.fft.rfft2(theta_lat[i, :, :])
+#     square_ft = np.absolute(ft_theta_lat) ** 2
+#     ft_corr = ft_corr + np.fft.irfft2(square_ft)
+#     x = range(X)
+#     z = range(Z)
+#     xv, zv = np.meshgrid(x, z)
+# 
+# ft_corr = ft_corr / T
+# # print ft_corr.shape
+# # print xv.shape
+# x_ft = np.mean(ft_corr, axis=1)
+# z_ft = np.mean(ft_corr, axis=0)
+# 
+# plt.plot(range(0,X), x_ft / x_ft[0], c='r', linewidth=2, label='X-ft')
+# plt.plot(range(0,Z), z_ft / z_ft[0], c='k', linewidth=2, label='Z-ft')
 # plt.show()
 
 # plt.clf()
@@ -308,16 +309,55 @@ plt.plot(range(0,Z), z_ft / z_ft[0], c='k', linewidth=2, label='Z-ft')
 # ax.plot_surface(xv, zv, ft_corr.T)
 # plt.show()
 
-# exit(1)
+# spatial correlation for first 50 ns
+all_corr_xz = []
+samplez = 10
+# DT = t_steps / samplez
+X = theta_lat.shape[1]
+Z = theta_lat.shape[2]
+DT = theta_lat[0:50000,:,:].shape[0] / samplez
+# fig = plt.figure()
+# ax  = fig.add_subplot(111, projection='3d')
+var_list = []
+for sample in xrange(samplez):
+    To = DT*sample
+    Tf = DT*(sample+1)
+    sub_txz = theta_lat[To:Tf, :, :]
+    
+    cov_xz = np.zeros((X/2, Z/2))
+    for t in xrange(DT):
+       for x in xrange(X/2):
+            for z in xrange(Z/2):
+#                 print cov_xz.shape
+#                 print sub_txz[t,x,z].shape
+#                 print sub_txz[t,x : x + X/2,z : z + Z/2].shape
+                cov_xz += sub_txz[t, x, z] * sub_txz[t, x : x + X/2, z : z + Z/2]
+    
+    cov_xz /= (DT * X/2 * Z/2 )
+    var_list.append(cov_xz[0,0])
+    corr_xz = cov_xz / cov_xz[0,0]
+#     corr_xz = cov_xz
+    
+    x = range(X/2)
+    z = range(Z/2)
+    xv, zv = np.meshgrid(x, z)
+    
+    all_corr_xz.append(corr_xz)
+
+all_corr_xz = np.array(all_corr_xz)
+m_corr_xz_half = np.mean(all_corr_xz, axis=0)
+d_corr_xz_half = np.std (all_corr_xz, axis=0) / np.sqrt(samplez)
 
 # correlation plots with first data point removed
-plt.errorbar(range(1, X/2), m_corr_xz[1:,0], d_corr_xz[1:,0], c='b', label="X", linewidth=2)
+# plt.errorbar(range(1, X/2), m_corr_xz[1:,0], d_corr_xz[1:,0], c='b', label="X", linewidth=2)
 plt.errorbar(range(0, X/2), m_corr_xz[:,0], d_corr_xz[:,0], c='b', label="X", linewidth=2)
+plt.errorbar(range(0, X/2), m_corr_xz_half[:,0], d_corr_xz_half[:,0], c='k', label="X (first half)", linewidth=2)
 plt.hlines(0, -1, X/2, linestyles="dashed")
 plt.xlim([-1.0,X/2])
 plt.ylim(-0.1,0.2)
 # plt.errorbar(range(1, Z/2), m_corr_xz[0,1:], d_corr_xz[0,1:], c='g', label="Z", linewidth=2)
 plt.errorbar(range(0, Z/2), m_corr_xz[0,:], d_corr_xz[0,:], c='g', label="Z", linewidth=2)
+plt.errorbar(range(0, Z/2), m_corr_xz_half[0,:], d_corr_xz_half[0,:], c='r', label="Z (first half)", linewidth=2)
 plt.hlines(0, -1, Z/2, linestyles="dashed")
 plt.xlabel('x or z', fontsize=30)
 plt.ylabel('G(x, z)', fontsize=30)
@@ -330,7 +370,12 @@ for i in range(X/2):
     for j in range(Z/2):
         print '{} {} {} {}'.format(i, j, m_corr_xz[i,j], d_corr_xz[i,j])
 
-exit(1)
+print 'spatial correlation (first 50ns)'
+for i in range(X/2):
+    for j in range(Z/2):
+        print '{} {} {} {}'.format(i, j, m_corr_xz_half[i,j], d_corr_xz_half[i,j])
+
+# exit(1)
 
 theta_lat = []
 for i in range(T):

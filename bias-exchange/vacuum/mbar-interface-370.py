@@ -318,7 +318,7 @@ plt.ylabel(r'$P(\theta_z)$', fontsize=28)
 plt.show()
 
 for i in range(len(theta_axis)):
-    print "{} {} {} {}".format(theta_axis[i], f_i[i], E_bin[i], delta_s[i])
+    print "{} {} {} {}".format(theta_axis[i], f_i[i] / target_beta, E_bin[i], delta_s[i])
 
 # finding free energy profile at coexistence temperature
 u_kn = np.zeros([K, N_max])

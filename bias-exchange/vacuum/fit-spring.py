@@ -30,7 +30,7 @@ N = 240
 def spring(x, x0, k):
     return 0.5 * k * (x - x0) ** 2
 
-ord_spring = np.where((theta_axis >= -0.74) * (theta_axis <=-0.65))
+ord_spring = np.where((theta_axis >= -0.74) * (theta_axis <=-0.68))
 x_ord = theta_axis[ord_spring]
 y_ord = f_i[ord_spring]
 y_ord_min = min(y_ord)
@@ -62,11 +62,11 @@ plt.plot(x_disord, fit_disord + y_disord_min, 'g^')
 plt.show()
 
 # calculate and print partition functions and full free energies
-Q_ord = integrate.simps( np.exp(-target_beta * (fit_ord + y_ord_min)), x_ord )
+Q_ord = integrate.simps( np.exp(-(fit_ord + y_ord_min)), x_ord )
 fullF_ord = - np.log(Q_ord) / target_beta
 S_ord = integrate.simps(data[:,3][ord_spring], x_ord)
 
-Q_disord = integrate.simps( np.exp(-target_beta * (fit_disord + y_disord_min)), x_disord )
+Q_disord = integrate.simps( np.exp(-(fit_disord + y_disord_min)), x_disord )
 fullF_disord = - np.log(Q_disord) / target_beta
 S_disord = integrate.simps(data[:,3][disord_spring], x_disord)
 
@@ -86,6 +86,8 @@ def gauss(x, x0, v, n):
     return np.exp( -(x-x0)**2 / (2*v/n) )
 
 # fit to gaussians to get mean and variance
+ord_spring = np.where((theta_axis >= -0.75) * (theta_axis <=-0.68))
+x_ord = theta_axis[ord_spring]
 y_ord = f_i[ord_spring]
 y_ord_min = min(y_ord)
 popt, pcov = curve_fit(spring, x_ord, y_ord - y_ord_min, p0=(-0.73, 2500.0))
@@ -100,9 +102,11 @@ v_disord = (1 / popt[1]) * N
 
 print y_ord_min, y_disord_min
 
-prob_i = np.exp(-trans_beta * f_i)
-p1 = gauss(theta_axis, mean_ord, v_ord, N) * np.exp(-trans_beta * y_ord_min) 
-p2 = gauss(theta_axis, mean_disord, v_disord, N) * np.exp(-trans_beta * y_disord_min) 
+prob_i = np.exp(-f_i)
+p1 = gauss(theta_axis, mean_ord, v_ord, N) * np.exp(-y_ord_min) 
+p2 = gauss(theta_axis, mean_disord, v_disord, N) * np.exp(-y_disord_min) 
+# p1 = gauss(theta_axis, mean_ord, v_ord, N)
+# p2 = gauss(theta_axis, mean_disord, v_disord, N)
 
 # diagnostic plot #1
 plt.plot(theta_axis, p1, 'bv', label='ordered prob dist')
@@ -133,27 +137,51 @@ plt.show()
 # plt.legend(loc='best')
 # plt.show()
 
-# do optimisation here
+# define fitting functions here
 def surf_term(f, gamma):
     return np.exp( -trans_beta * gamma * Lx * min(2*np.pi*f, 1) )
 
 def integrand(f, args):
     x, gamma = args
     num = -N * ( -mean_ord * f + mean_disord * (f - 1) + x )**2 / ( 2 * (f * (v_ord - v_disord) + v_disord) )
-    denom = 2 * np.pi * np.sqrt(v_disord / N) * np.sqrt( v_ord / (f*N - N * f**2) )
-    denom = denom * np.sqrt( ( (N * v_ord - N * v_disord) * f**2 + f*N*v_disord ) / ( 2 * np.pi * v_ord * v_disord * (1-f) ) )
+    denom = np.sqrt(2 * np.pi) * np.sqrt(v_disord / N) * np.sqrt( v_ord / (f*N - N * f**2) )
+    denom = denom * np.sqrt( f * N * ( 1/v_ord + f/( v_disord * (1-f) ) ) )
     return (np.exp(num) * surf_term(f, gamma)) / denom 
 
 def curve(x, gamma):
-     res = integrate.quad(integrand, 0, 1, [x,gamma])
-     return -np.log( res[0] + ( gauss(x, mean_ord, v_ord, N) + gauss(x, mean_disord, v_disord, N) ) )
+    res = integrate.quad(integrand, 0, 1, [x,gamma])
+    ord_term = gauss(x, mean_ord, v_ord, N) * np.exp(-y_ord_min)
+    disord_term = gauss(x, mean_disord, v_disord, N) * np.exp(-y_disord_min)
+#     ord_term = gauss(x, mean_ord, v_ord, N)
+#     disord_term = gauss(x, mean_disord, v_disord, N)
+    return -np.log( res[0] + ord_term + disord_term )
 
 vcurve = np.vectorize(curve)
-popt, pcov = curve_fit(vcurve, theta_axis, target_beta * f_i, p0=1e-5)
-print "results of surface tension optimisation:"
-print popt
 
-# plt.plot(theta_axis, vcurve(theta_axis, popt[0]), 'bs')
+# plot what free energy fit looks like for different values of gamma
+size = np.logspace(np.log10(0.5), -1, 10).shape[0]
+color = iter(plt.cm.rainbow(np.linspace(0,1,size)))
+for gamma_i in np.logspace(np.log10(0.5), -1, 10):
+    c = next(color)
+    test_data = vcurve(theta_axis, gamma_i)
+    plt.plot(theta_axis, test_data, 'o', color=c, label='fit for gamma = {:1.3f}'.format(gamma_i))
+    plt.plot(theta_axis, test_data, color=c, linewidth=4, alpha=0.5)
+plt.plot(theta_axis, f_i, 'b', linewidth=3, alpha=0.5, label='original beta*free energy')
+plt.legend(loc='best', fontsize=20)
+plt.show()
+
+# fitting procedure for best gamma value
+popt, pcov = curve_fit(vcurve, theta_axis, f_i, p0=0.17)
+print "results of surface tension optimisation:"
+print popt[0]
+
+gamma_opt = popt[0]
+test_data = vcurve(theta_axis, gamma_opt)
+plt.plot(theta_axis, test_data, 'ro', label='fit for gamma = {:1.3f}'.format(gamma_opt))
+plt.plot(theta_axis, test_data, 'r', linewidth=4, alpha=0.5)
+plt.plot(theta_axis, f_i, 'b', linewidth=3, alpha=0.5, label='original beta*free energy')
+plt.legend(loc='best', fontsize=20)
+plt.show()
 
 
 

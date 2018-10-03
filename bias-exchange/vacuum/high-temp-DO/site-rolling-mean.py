@@ -45,11 +45,21 @@ time_arr = np.arange(T)
 
 plt.plot(running_mean(theta_lat[:,2,4], args.step), 'r')
 plt.plot(running_mean(theta_lat[:,13,8], args.step), 'b')
+plt.title('sites (3, 5) and (14, 9)')
 plt.show()
+
 plt.plot(running_mean(theta_lat[:,4,10], args.step), 'r')
 plt.plot(running_mean(theta_lat[:,5,1], args.step), 'b')
+plt.title('sites (4, 11) and (6, 2)')
 plt.show()
+
 plt.plot(running_mean(theta_lat[:,6,3], args.step), 'r')
 plt.plot(running_mean(theta_lat[:,17,9], args.step), 'b')
+plt.title('sites (7, 4) and (18, 10)')
+plt.show()
+
+plt.plot(running_mean(theta_lat[:,4,10], args.step), 'r')
+plt.plot(running_mean(theta_lat[:,5,10], args.step), 'b')
+plt.title('sites (5, 11) and (6, 11)')
 plt.show()
 
