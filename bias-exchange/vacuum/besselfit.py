@@ -7,6 +7,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-file_in", type=str, help="Name of file to load data from")
 parser.add_argument('-v', action='store_true', help="Run verbosely")
+parser.add_argument('-use_x', action='store_true', help="Use x-correlation for fitting, in false, use z-correlation")
 args = parser.parse_args()
 
 def bessel_0(x):
@@ -23,8 +24,8 @@ def chi_func(F, L, x, y, dy):
     return chisq
 
 sheet_data = np.loadtxt(args.file_in)
-x_max = max(sheet_data[:,0])
-z_max = max(sheet_data[:,1])
+x_max = int(max(sheet_data[:,0]))
+z_max = int(max(sheet_data[:,1]))
 corr_xz = np.zeros((x_max+1, z_max+1))
 dcorr_xz = np.zeros((x_max+1, z_max+1))
 for row in sheet_data:
@@ -33,13 +34,16 @@ for row in sheet_data:
 
 # choose either x- or z-direction for fitting
 
-#axis = range(1,int(x_max+1))  # x-direction
-#dat  = corr_xz[1:, 0]
-#d_dat = dcorr_xz[1:, 0]
-
-axis = range(1,int(z_max+1))   # z-direction
-dat  = corr_xz[0, 1:]
-d_dat = dcorr_xz[0, 1:]
+if args.use_x:
+    print "using x-correlation for fitting"
+    axis = range(1,int(x_max+1))  # x-direction
+    dat  = corr_xz[1:, 0]
+    d_dat = dcorr_xz[1:, 0]
+else:
+    print "using z-correlation for fitting"
+    axis = range(1,int(z_max+1))   # z-direction
+    dat  = corr_xz[0, 1:]
+    d_dat = dcorr_xz[0, 1:]
 
 def chi_bessel(L):
     return chi_func(bessel_0, L, axis, dat, d_dat)
@@ -61,4 +65,24 @@ errL = varL - optL
 if args.v:
     print "Minimum value of L +/- dL for K_0(x/L) fit to data:",
 print "{} {}".format( optL, errL )
+
+# plot fit versus actual data
+if args.use_x:
+    x_fit = np.linspace(0, x_max, 10)
+else:
+    x_fit = np.linspace(0, z_max, 10)
+y_fit = sp.kn(0, x_fit/optL)
+y_maxfit = sp.kn(0, x_fit/(optL+2*errL))
+y_minfit = sp.kn(0, x_fit/(optL-2*errL))
+
+plt.plot(x_fit, y_fit, 'ro', label='Bessel fit')
+plt.fill_between(x_fit, y_minfit, y_maxfit, color='r', alpha=0.5)
+plt.plot(axis, dat, 'bv', markersize=10, label='original data from simulation')
+if args.use_x:
+    plt.title('fit to x-correlation function', fontsize=30)
+else:
+    plt.title('fit to z-correlation function', fontsize=30)
+plt.legend(loc='best')
+plt.show()
+
 

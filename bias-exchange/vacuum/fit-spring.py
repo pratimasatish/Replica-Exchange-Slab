@@ -12,6 +12,7 @@ args = parser.parse_args()
 
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
+plt.rcParams['text.latex.preamble']=[r"\usepackage{amsmath}"]
 plt.rc('font', size=28)
 plt.rc('font', weight='bold')
 plt.rc('xtick', labelsize=28)
@@ -55,24 +56,33 @@ fit_disord = spring(x_disord, mean_disord, k_disord)
 # print popt[0], popt[1]
 
 # plot original free energy and fits
-plt.plot(theta_axis, f_i, 'ro')
-plt.plot(theta_axis, f_i, 'r', linewidth=4, alpha=0.5)
-plt.plot(x_ord, fit_ord + y_ord_min, 'bv')
-plt.plot(x_disord, fit_disord + y_disord_min, 'g^')
+plt.plot(theta_axis, f_i, marker='o', color='#006d2c')
+plt.plot(theta_axis, f_i, color='#006d2c', linewidth=4, alpha=0.5)
+# plt.plot(x_ord, fit_ord + y_ord_min, 'bv')
+# plt.plot(x_disord, fit_disord + y_disord_min, 'g^')
+plt.xlabel(r'$\langle\theta_z\rangle$', fontsize=28)
+plt.ylabel(r'$F(\langle\theta_z\rangle) \textrm{ (in kcal/mol-rad)}$', fontsize=28)
 plt.show()
 
 # calculate and print partition functions and full free energies
 Q_ord = integrate.simps( np.exp(-(fit_ord + y_ord_min)), x_ord )
 fullF_ord = - np.log(Q_ord) / target_beta
+E_ord = integrate.simps(data[:,2][ord_spring], x_ord)
 S_ord = integrate.simps(data[:,3][ord_spring], x_ord)
 
 Q_disord = integrate.simps( np.exp(-(fit_disord + y_disord_min)), x_disord )
 fullF_disord = - np.log(Q_disord) / target_beta
+E_disord = integrate.simps(data[:,2][disord_spring], x_disord)
 S_disord = integrate.simps(data[:,3][disord_spring], x_disord)
 
+trans_guess = (E_disord - E_ord) / (S_disord - S_ord)
+
+print "order parameter values: ord = {} disord = {}".format(mean_ord, mean_disord)
 print "partition functions: ord = {} disord = {}".format(Q_ord, Q_disord)
 print "total free energies: ord = {} disord = {}".format(fullF_ord, fullF_disord)
+print "total energies: ord = {} disord = {}".format(E_ord, E_disord)
 print "total entropies: ord = {} disord = {}".format(S_ord, S_disord)
+print "estimated transition by setting delta F = 0: {} K".format(trans_guess)
 
 # optimising to find surface tension
 data = np.genfromtxt('f_i-combined-375.6.txt')
@@ -116,10 +126,15 @@ plt.legend(loc='best')
 plt.show()
 
 # diagnostic plot #2
-plt.plot(theta_axis,-np.log(p1), 'bv', label='log ordered prob dist')
-plt.plot(theta_axis, -np.log(p2), 'g^', label='log disordered prob dist')
-plt.plot(theta_axis, -np.log(prob_i), 'ro', label='log total prob dist')
-plt.legend(loc='best')
+plt.plot(theta_axis,-np.log(p1), 'bv', label=r'\boldsymbol{-} \textbf{log(} \boldsymbol{P_{ord}} \textbf{)}')
+plt.plot(theta_axis, -np.log(p2), 'g^', label=r'\boldsymbol{-} \textbf{log(} \boldsymbol{P_{disord}} \textbf{)}')
+plt.plot(theta_axis, -np.log(prob_i), 'ro')
+# plt.plot(theta_axis, -np.log(prob_i), 'r', linewidth=4, alpha=0.4)
+plt.xlabel(r'\boldsymbol{$\langle\theta_z\rangle}', fontsize=28)
+plt.ylabel(r'$\textbf{log probability}$', fontsize=28)
+# plt.title(r'\textbf{Free energy at coexistence}')
+plt.ylabel(r'$\boldsymbol{\beta F}$', fontsize=28)
+plt.legend(loc='best', markerscale=2)
 plt.show()
 
 # diagnostic plot #3
@@ -138,18 +153,18 @@ plt.show()
 # plt.show()
 
 # define fitting functions here
-def surf_term(f, gamma):
-    return np.exp( -trans_beta * gamma * Lx * min(2*np.pi*f, 1) )
+def surf_term(f, sigma):
+    return np.exp( -trans_beta * sigma * Lx * min(2*np.pi*f, 1) )
 
 def integrand(f, args):
-    x, gamma = args
+    x, sigma = args
     num = -N * ( -mean_ord * f + mean_disord * (f - 1) + x )**2 / ( 2 * (f * (v_ord - v_disord) + v_disord) )
     denom = np.sqrt(2 * np.pi) * np.sqrt(v_disord / N) * np.sqrt( v_ord / (f*N - N * f**2) )
     denom = denom * np.sqrt( f * N * ( 1/v_ord + f/( v_disord * (1-f) ) ) )
-    return (np.exp(num) * surf_term(f, gamma)) / denom 
+    return (np.exp(num) * surf_term(f, sigma)) / denom 
 
-def curve(x, gamma):
-    res = integrate.quad(integrand, 0, 1, [x,gamma])
+def curve(x, sigma):
+    res = integrate.quad(integrand, 0, 1, [x,sigma])
     ord_term = gauss(x, mean_ord, v_ord, N) * np.exp(-y_ord_min)
     disord_term = gauss(x, mean_disord, v_disord, N) * np.exp(-y_disord_min)
 #     ord_term = gauss(x, mean_ord, v_ord, N)
@@ -158,28 +173,34 @@ def curve(x, gamma):
 
 vcurve = np.vectorize(curve)
 
-# plot what free energy fit looks like for different values of gamma
+# plot what free energy fit looks like for different values of sigma
 size = np.logspace(np.log10(0.5), -1, 10).shape[0]
 color = iter(plt.cm.rainbow(np.linspace(0,1,size)))
-for gamma_i in np.logspace(np.log10(0.5), -1, 10):
+for sigma_i in np.logspace(np.log10(0.5), -1, 10):
     c = next(color)
-    test_data = vcurve(theta_axis, gamma_i)
-    plt.plot(theta_axis, test_data, 'o', color=c, label='fit for gamma = {:1.3f}'.format(gamma_i))
+    test_data = vcurve(theta_axis, sigma_i)
+    plt.plot(theta_axis, test_data, 'o', color=c, label=r'$\textbf{{fit for }} \boldsymbol{{\sigma}} \textbf{{ = {:1.3f} kcal/mol-nm}}$'.format(sigma_i / (10 * trans_beta)))
     plt.plot(theta_axis, test_data, color=c, linewidth=4, alpha=0.5)
-plt.plot(theta_axis, f_i, 'b', linewidth=3, alpha=0.5, label='original beta*free energy')
+plt.plot(theta_axis, f_i, 'b', linewidth=3, alpha=0.8, label=r'$\textbf{original } \boldsymbol{\beta F}$')
+plt.xlabel(r'$\boldsymbol{\langle\theta_z\rangle}', fontsize=28)
+plt.ylabel(r'$\boldsymbol{\beta F(\langle\theta_z\rangle)}$', fontsize=28)
 plt.legend(loc='best', fontsize=20)
 plt.show()
 
-# fitting procedure for best gamma value
+# fitting procedure for best sigma value
 popt, pcov = curve_fit(vcurve, theta_axis, f_i, p0=0.17)
-print "results of surface tension optimisation:"
+print "results of surface tension optimisation (in kBT/Angstrom):"
 print popt[0]
+print "results of surface tension optimisation (in kcal/mol-nm):"
+print popt[0] / (10 * trans_beta)
 
-gamma_opt = popt[0]
-test_data = vcurve(theta_axis, gamma_opt)
-plt.plot(theta_axis, test_data, 'ro', label='fit for gamma = {:1.3f}'.format(gamma_opt))
+sigma_opt = popt[0]
+test_data = vcurve(theta_axis, sigma_opt)
+plt.plot(theta_axis, test_data, 'ro', label=r'$\textbf{{ fit for }} \boldsymbol{{\sigma}} \textbf{{ = {:1.3f} kcal/mol-nm}}'.format(sigma_opt / (10 * trans_beta)))
 plt.plot(theta_axis, test_data, 'r', linewidth=4, alpha=0.5)
-plt.plot(theta_axis, f_i, 'b', linewidth=3, alpha=0.5, label='original beta*free energy')
+plt.plot(theta_axis, f_i, 'b', linewidth=3, alpha=0.5, label=r'$\textbf{original } \boldsymbol{\beta F}$')
+plt.xlabel(r'$\boldsymbol{\langle\theta_z\rangle}', fontsize=28)
+plt.ylabel(r'$\boldsymbol{\beta F(\langle\theta_z\rangle)}$', fontsize=28)
 plt.legend(loc='best', fontsize=20)
 plt.show()
 
