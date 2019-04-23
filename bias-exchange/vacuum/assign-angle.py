@@ -36,6 +36,7 @@ for i in range(T):
     theta_lat.append( ligdata[i, :, :].flatten() )
 theta_lat = np.array(theta_lat)
 theta_lat = theta_lat.reshape((-1, 20, 12))
+print np.mean(theta_lat)
 # print theta_lat.shape
 
 # plt.clf();plt.hist(theta_lat[:,:].flatten(), bins=100, normed=True);plt.show()

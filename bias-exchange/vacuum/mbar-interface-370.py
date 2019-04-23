@@ -229,8 +229,7 @@ for i in range(max_bins):
         # increment number of bins
         nbins += 1
 
-target_temp = 372.5
-target_temp = 370.0
+target_temp = 378.0
 target_beta = 1/(kB*target_temp)
 u_kn = np.zeros([K, N_max])
 # populate diagonal blocks in MBAR array

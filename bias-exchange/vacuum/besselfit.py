@@ -68,9 +68,9 @@ print "{} {}".format( optL, errL )
 
 # plot fit versus actual data
 if args.use_x:
-    x_fit = np.linspace(0, x_max, 10)
+    x_fit = np.linspace(0.9, x_max, 25)
 else:
-    x_fit = np.linspace(0, z_max, 10)
+    x_fit = np.linspace(0.9, z_max, 25)
 y_fit = sp.kn(0, x_fit/optL)
 y_maxfit = sp.kn(0, x_fit/(optL+2*errL))
 y_minfit = sp.kn(0, x_fit/(optL-2*errL))

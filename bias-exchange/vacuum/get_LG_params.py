@@ -17,12 +17,16 @@ print "d0 at 370 K: {} kcal/mol-K-rad^2".format(d0[0])
 print "d0 at 380 K: {} kcal/mol-K-rad^2".format(d0[1])
 print "average d0: {} kcal/mol-K-rad^2".format(avg_d0)
 
-# in nm
-lambda_val = np.array([,])
-P = 
-kappa = lambda_val**2 / P
-
 # in kcal/mol-K-nm
 sigma = 0.0129
+
+# in nm
+lambda_val = np.array([9.72, 10.8])
+lambda_sq = lambda_val ** 2
+eta = np.array([-0.73, -0.24])
+T = np.array([365, 400])
+
+ 
+
 
 
