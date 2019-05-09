@@ -24,28 +24,26 @@ plt.rc('font', size=28)
 plt.rc('xtick', labelsize=28)
 plt.rc('ytick', labelsize=28)
 
-data_txz = np.zeros((data.shape[0], data.shape[1], data.shape[2]))
-data_txz[:, :, :] = np.copy(data[:, :, :])
-ligdata = data_txz
-T = len(ligdata)
+theta_lat = np.copy(data)
+T = len(data)
 
-# get theta values at each lattice site as a function of time
-theta_lat = []
-for i in range(T):
-    theta_lat.append( ligdata[i, :, :].flatten() )
-theta_lat = np.array(theta_lat)
-theta_lat = theta_lat.reshape((-1, 10, 12))
 print np.mean(theta_lat)
+theta_t = np.mean(theta_lat, axis=(1,2))
+print np.mean(theta_t)
 # print theta_lat.shape
 
 # plt.clf();plt.hist(theta_lat[:,:].flatten(), bins=100, normed=True);plt.show()
+plt.clf();plt.hist(theta_t, bins=100, normed=True);plt.show()
 # print theta_lat[:,:].flatten().var()
 
 theta_mean = np.mean(theta_lat, axis=0)
+max_theta = theta_lat.max()
+min_theta = theta_lat.min()
+
 # print theta_mean.shape
 # print 'x-mean', np.mean(theta_mean, axis=0)
 # print 'z-mean', np.mean(theta_mean, axis=1)
-plt.imshow(theta_mean, aspect=1.2, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.4, vmax=-0.1)
+plt.imshow(theta_mean, aspect=1.2, cmap="seismic_r", origin="lower", interpolation="none", vmin=0.0, vmax=0.4)
 # plt.imshow(theta_mean, aspect=1.2, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.8, vmax=-0.1)
 plt.xticks(np.arange(0, 12, 1))
 plt.yticks(np.arange(0, 10, 1))
@@ -58,7 +56,6 @@ for i in np.arange(-0.5,10,1.0):
 plt.colorbar()
 plt.show()
 
-theta_lat -= theta_lat.mean()
 
 if args.savefigs:
     name_arr = range(0, theta_lat.shape[0], 10)
@@ -66,7 +63,8 @@ if args.savefigs:
     for j in range(len(name_arr)):
     # for j in range(0, 100, 20):
         matr = theta_lat[name_arr[j]].transpose()
-        plt.imshow(matr, aspect=1.2, cmap="seismic_r", origin="lower", interpolation="none", vmin=-0.4, vmax=-0.1)
+#         plt.imshow(matr, aspect=1.0, cmap="seismic_r", origin="lower", interpolation="none", vmin=min_theta, vmax=max_theta)
+        plt.imshow(matr, aspect=1/1.2, cmap="seismic_r", origin="lower", interpolation="none", vmin=0.0, vmax=0.4)
 #         plt.imshow(matr, aspect=1.7, cmap="PRGn_r", origin="lower", interpolation="none", vmin=-0.8, vmax=-0.1)
         plt.yticks(np.arange(0, 12, 1))
         plt.xticks(np.arange(0, 10, 1))
@@ -77,11 +75,12 @@ if args.savefigs:
         for i in np.arange(-0.5,10,1.0):
             plt.vlines(i, -0.5, 11.5, linestyle='solid', linewidth=2)
         plt.colorbar()
-        plt.savefig('lat-' + args.bias + '-{:05d}.png'.format(j))
+        plt.savefig('botlat' + args.bias + '-{:05d}.png'.format(j))
 #         plt.savefig('lat-0.7250-{:05d}.png'.format(j))
         plt.clf()
 
 
+theta_lat -= theta_lat.mean()
 all_corr_xz = []
 samplez = 10
 # DT = t_steps / samplez
@@ -125,12 +124,12 @@ d_corr_xz = np.std (all_corr_xz, axis=0) / np.sqrt(samplez)
 # correlation plots with first data point removed
 # plt.errorbar(range(1, X/2), m_corr_xz[1:,0], d_corr_xz[1:,0], c='b', label="X", linewidth=2)
 plt.errorbar(range(0, X/2), m_corr_xz[:,0], d_corr_xz[:,0], c='b', label="X", linewidth=2)
-plt.hlines(0, -1, X/2, linestyles="dashed")
-plt.xlim([-1.0,X/2])
-plt.ylim(-0.1,0.2)
+plt.hlines(0, 0, X/2, linestyles="dashed")
+plt.xlim([0.0,Z/2])
+plt.ylim(-0.1,1.1)
 # plt.errorbar(range(1, Z/2), m_corr_xz[0,1:], d_corr_xz[0,1:], c='g', label="Z", linewidth=2)
 plt.errorbar(range(0, Z/2), m_corr_xz[0,:], d_corr_xz[0,:], c='g', label="Z", linewidth=2)
-plt.hlines(0, -1, Z/2, linestyles="dashed")
+plt.hlines(0, 0, Z/2, linestyles="dashed")
 plt.xlabel('x or z', fontsize=30)
 plt.ylabel('G(x, z)', fontsize=30)
 plt.legend(loc='upper right', fontsize=30)
