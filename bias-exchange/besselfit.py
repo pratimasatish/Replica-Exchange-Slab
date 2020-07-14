@@ -18,7 +18,6 @@ plt.rc('legend', frameon=False)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-temp", type=str, help="Temperature at which to get correlation")
-parser.add_argument('-v', action='store_true', help="Run verbosely")
 parser.add_argument('-use_x', action='store_true', help="Use x-correlation for fitting, in false, use z-correlation")
 args = parser.parse_args()
 
@@ -41,8 +40,8 @@ z_max = int(max(sheet_data[:,1]))
 corr_xz = np.zeros((x_max+1, z_max+1))
 dcorr_xz = np.zeros((x_max+1, z_max+1))
 for row in sheet_data:
-    corr_xz[row[0], row[1]] = row[2]
-    dcorr_xz[row[0], row[1]] = row[3]
+    corr_xz[int(row[0]), int(row[1])] = row[2]
+    dcorr_xz[int(row[0]), int(row[1])] = row[3]
 
 # choose either x- or z-direction for fitting
 
@@ -74,9 +73,7 @@ varL = opt.minimize(chi_shift, optL*1.1, method='TNC', bounds=((optL,None),) ).x
 errL = varL - optL
 # print varL, errL
 
-if args.v:
-    print "Minimum value of L +/- dL for K_0(x/L) fit to data:",
-print "{} {}".format( optL, errL )
+print "Minimum value of L +/- dL for K_0(x/L) fit to data: {} +/- {} nm".format( optL, errL )
 
 # plot fit versus actual data
 if args.use_x:
@@ -88,9 +85,9 @@ y_maxfit = sp.kn(0, x_fit/(optL+2*errL))
 y_minfit = sp.kn(0, x_fit/(optL-2*errL))
 
 plt.figure(figsize=(12,9))
-plt.plot(x_fit, y_fit, color='#a50f15', lw=3, label=r'$\mathsf{Bessel\,\,fit}$')
+plt.plot(x_fit, y_fit, color='#a50f15', lw=3, label='Bessel fit')
 plt.fill_between(x_fit, y_minfit, y_maxfit, color='#a50f15', alpha=0.5)
-plt.plot(axis, dat, color='#01665e', marker='v', markersize=22, lw=0, label=r'$\mathsf{Original\,\,data\,\,from\,\,simulation}$')
+plt.plot(axis, dat, color='#01665e', marker='v', markersize=22, lw=0, label='Original data from simulation')
 plt.xlim((0.8, max(x_fit) + 0.2))
 # if args.use_x:
 #     plt.title('fit to x-correlation function', fontsize=30)
@@ -100,6 +97,6 @@ plt.legend(loc='best')
 plt.xlabel(r'$\mathsf{z}$')
 plt.ylabel(r'$\mathsf{G(z)}$')
 # plt.show()
-plt.savefig('cg-besselfit-z-{}K.pdf'.format(args.temp))
+plt.savefig('cg-besselfit-solv-z-{}K.pdf'.format(args.temp))
 
 
